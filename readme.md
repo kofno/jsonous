@@ -89,7 +89,7 @@ That depends on your own preferences and what's appropriate for the situation.
 In any case, the best strategy for handling object construction with decoders
 is to compose complex decoders from smaller, simpler decoders.
 
-    field("user", userDecoder.andThen(user =>
+    field("user", userDecoder).andThen(user =>
     at(["student", "courses"], array(courseDecoder)).andThen(courses =>
     succeed({ user, courses })
     .decodeJson('... some json ... ')
