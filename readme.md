@@ -4,7 +4,7 @@ If you're building a web application, you're eventually going to need a reliable
 way to convert JSON into type that you can use. `JSON.parse` will only get you
 so far.
 
-A better solution allows you verify the structure of the source data while
+A better solution allows you to verify the structure of the source data while
 converting it into the types you need to work with. It handles variations in
 content structure. In a typed environment, it preserves your types so you don't
 have to pass `any` types around. Errors are handled gracefully using a Result
@@ -64,7 +64,7 @@ Of course, your code editor may try to reformat this code.
 
 For an object of any moderate complexity, this nesting may become an eyesore.
 
-Objects can also built using in the applicative style.
+Objects can also be built using the applicative style.
 
     const ctor = (id: number) => (email: string) => ({ id, email });
     const decoder = succeed(ctor)
