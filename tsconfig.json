@@ -1,0 +1,22 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "ES5",
+        "noImplicitAny": true,
+        "preserveConstEnums": true,
+        "alwaysStrict": true,
+        "strictNullChecks": true,
+        "sourceMap": true,
+        "declaration": true,
+        "outDir": "dist",
+        "watch": true
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.test.ts"
+    ]
+}
