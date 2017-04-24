@@ -918,7 +918,7 @@ img { max-width: 100%; }
 			<p>If you&#39;re building a web application, you&#39;re eventually going to need a reliable
 				way to convert JSON into type that you can use. <code>JSON.parse</code> will only get you
 			so far.</p>
-			<p>A better solution allows you verify the structure of the source data while
+			<p>A better solution allows you to verify the structure of the source data while
 				converting it into the types you need to work with. It handles variations in
 				content structure. In a typed environment, it preserves your types so you don&#39;t
 				have to pass <code>any</code> types around. Errors are handled gracefully using a Result
@@ -961,7 +961,7 @@ img { max-width: 100%; }
   .decodeAny({ userId: <span class="hljs-number">213</span>, emailAddress: <span class="hljs-string">'foo@example.com'</span> })
   <span class="hljs-comment">// --&gt; Ok({ id: 213, email: 'foo@example.com'})</span>
 </code></pre><p>For an object of any moderate complexity, this nesting may become an eyesore.</p>
-			<p>Objects can also built using in the applicative style.</p>
+			<p>Objects can also be built using the applicative style.</p>
 			<pre><code><span class="hljs-keyword">const</span> ctor = <span class="hljs-function">(<span class="hljs-params">id: <span class="hljs-built_in">number</span></span>) =&gt;</span> (email: <span class="hljs-built_in">string</span>) =&gt; ({ id, email });
 <span class="hljs-keyword">const</span> decoder = succeed(ctor)
   .ap(field(<span class="hljs-string">'userId'</span>, <span class="hljs-built_in">number</span>()))
@@ -980,13 +980,13 @@ decoder.decodeAny({ userId: <span class="hljs-number">213</span>, emailAddress: 
 			That depends on your own preferences and what&#39;s appropriate for the situation.</p>
 			<p>In any case, the best strategy for handling object construction with decoders
 			is to compose complex decoders from smaller, simpler decoders.</p>
-			<pre><code>field(<span class="hljs-string">"user"</span>, userDecoder.andThen(<span class="hljs-function"><span class="hljs-params">user</span> =&gt;</span>
-at([<span class="hljs-string">"student"</span>, <span class="hljs-string">"courses"</span>], array(courseDecoder)).andThen(<span class="hljs-function"><span class="hljs-params">courses</span> =&gt;</span>
-succeed({ user, courses })
+			<pre><code><span class="hljs-function"><span class="hljs-title">field</span><span class="hljs-params">(<span class="hljs-string">"user"</span>, userDecoder)</span></span>.andThen(user =&gt;
+<span class="hljs-function"><span class="hljs-title">at</span><span class="hljs-params">([<span class="hljs-string">"student"</span>, <span class="hljs-string">"courses"</span>], array(courseDecoder)</span></span>).andThen(courses =&gt;
+<span class="hljs-function"><span class="hljs-title">succeed</span><span class="hljs-params">({ user, courses })</span></span>
 .decodeJson(<span class="hljs-string">'... some json ... '</span>)
 
-<span class="hljs-keyword">const</span> userDecoder = <span class="hljs-comment">//...</span>
-<span class="hljs-keyword">const</span> courseDecoder = <span class="hljs-comment">//...</span>
+const userDecoder = <span class="hljs-comment">//...</span>
+const courseDecoder = <span class="hljs-comment">//...</span>
 </code></pre><h1 id="docs">docs</h1>
 			<p><a href="https://kofno.github.io/jsonous">API</a></p>
 		</div>
