@@ -3,6 +3,7 @@
   "version": "1.0.1",
   "description": "Type safe JSON decoding for JavaScript",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "author": "Ryan L. Bell <ryan.l.bell@gmail.com>",
   "license": "MIT",
   "scripts": {
