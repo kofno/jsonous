@@ -1,7 +1,7 @@
 {
   "name": "jsonous",
   "version": "1.0.0",
-  "description": "Type safe decoding for JSON",
+  "description": "Type safe JSON decoding for JavaScript",
   "main": "dist/index.js",
   "author": "Ryan L. Bell <ryan.l.bell@gmail.com>",
   "license": "MIT",
