@@ -213,4 +213,15 @@ function oneOf<A>(decoders: Array<Decoder<A>>): Decoder<A> {
 }
 
 export default Decoder;
-export { string, number, boolean, array, field, succeed, at, maybe, oneOf };
+export {
+  string,
+  number,
+  boolean,
+  array,
+  field,
+  succeed,
+  at,
+  maybe,
+  oneOf,
+  fail,
+};
