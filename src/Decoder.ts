@@ -80,6 +80,22 @@ class Decoder<A> {
       return err(e.message) as Result<string, A>;
     }
   }
+
+  /**
+   * Returns a function that runs this docoder over any value when called.
+   * This is a convenient way to convert a decoder into a callback.
+   */
+  public toAnyFn() {
+    return (value: any) => this.decodeAny(value);
+  }
+
+  /**
+   * Returns a function that runs this decoder over a JSON string when called.
+   * This is a convenient way to convert a decoder into a callback.
+   */
+  public toJsonFn() {
+    return (json: string) => this.decodeJson(json);
+  }
 }
 
 /**
