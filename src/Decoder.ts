@@ -85,7 +85,7 @@ class Decoder<A> {
    * Returns a function that runs this docoder over any value when called.
    * This is a convenient way to convert a decoder into a callback.
    */
-  public toAnyFn() {
+  public toAnyFn(): (value: any) => Result<string, A> {
     return (value: any) => this.decodeAny(value);
   }
 
@@ -93,7 +93,7 @@ class Decoder<A> {
    * Returns a function that runs this decoder over a JSON string when called.
    * This is a convenient way to convert a decoder into a callback.
    */
-  public toJsonFn() {
+  public toJsonFn(): (json: string) => Result<string, A> {
     return (json: string) => this.decodeJson(json);
   }
 }
