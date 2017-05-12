@@ -1,6 +1,6 @@
 {
   "name": "jsonous",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Type safe JSON decoding for JavaScript",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
