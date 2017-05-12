@@ -43,11 +43,26 @@ declare class Decoder<A> {
      * error.
      */
     decodeJson(json: string): Result<string, A>;
+    /**
+     * Returns a function that runs this docoder over any value when called.
+     * This is a convenient way to convert a decoder into a callback.
+     */
+    toAnyFn(): (value: any) => Result<string, A>;
+    /**
+     * Returns a function that runs this decoder over a JSON string when called.
+     * This is a convenient way to convert a decoder into a callback.
+     */
+    toJsonFn(): (json: string) => Result<string, A>;
 }
 /**
  * Returns a decoder that always succeeds, resolving to the value passed in.
  */
 declare function succeed<A>(value: A): Decoder<A>;
+/**
+ * Returns a decoder that always fails, returning an Err with the message
+ * passed in.
+ */
+declare function fail(message: string): Decoder<any>;
 /**
  * String decoder
  */
@@ -82,4 +97,4 @@ declare function maybe<A>(decoder: Decoder<A>): Decoder<Maybe<A>>;
  */
 declare function oneOf<A>(decoders: Array<Decoder<A>>): Decoder<A>;
 export default Decoder;
-export { string, number, boolean, array, field, succeed, at, maybe, oneOf };
+export { string, number, boolean, array, field, succeed, at, maybe, oneOf, fail };

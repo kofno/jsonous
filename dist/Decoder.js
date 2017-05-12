@@ -73,6 +73,22 @@ var Decoder = (function () {
             return resulty_1.err(e.message);
         }
     };
+    /**
+     * Returns a function that runs this docoder over any value when called.
+     * This is a convenient way to convert a decoder into a callback.
+     */
+    Decoder.prototype.toAnyFn = function () {
+        var _this = this;
+        return function (value) { return _this.decodeAny(value); };
+    };
+    /**
+     * Returns a function that runs this decoder over a JSON string when called.
+     * This is a convenient way to convert a decoder into a callback.
+     */
+    Decoder.prototype.toJsonFn = function () {
+        var _this = this;
+        return function (json) { return _this.decodeJson(json); };
+    };
     return Decoder;
 }());
 /**
@@ -89,6 +105,7 @@ exports.succeed = succeed;
 function fail(message) {
     return new Decoder(function (_) { return resulty_1.err(message); });
 }
+exports.fail = fail;
 /**
  * String decoder
  */
