@@ -8,7 +8,7 @@ export declare type DecoderFn<A> = (thing: any) => Result<string, A>;
  * A Decoder represents a value that can be converted to a known type, either
  * from JSON or from an <any> typed object.
  */
-declare class Decoder<A> {
+export default class Decoder<A> {
     private fn;
     constructor(thisFn: DecoderFn<A>);
     /**
@@ -57,44 +57,42 @@ declare class Decoder<A> {
 /**
  * Returns a decoder that always succeeds, resolving to the value passed in.
  */
-declare function succeed<A>(value: A): Decoder<A>;
+export declare const succeed: <A>(value: A) => Decoder<A>;
 /**
  * Returns a decoder that always fails, returning an Err with the message
  * passed in.
  */
-declare function fail(message: string): Decoder<any>;
+export declare const fail: (message: string) => Decoder<any>;
 /**
  * String decoder
  */
-declare function string(): Decoder<string>;
+export declare const string: () => Decoder<string>;
 /**
  * Number decoder
  */
-declare function number(): Decoder<number>;
+export declare const number: () => Decoder<number>;
 /**
  * Boolean decoder
  */
-declare function boolean(): Decoder<boolean>;
+export declare const boolean: () => Decoder<boolean>;
 /**
  * Applies the `decoder` to all of the elements of an array.
  */
-declare function array<A>(decoder: Decoder<A>): Decoder<A[]>;
+export declare const array: <A>(decoder: Decoder<A>) => Decoder<A[]>;
 /**
  * Decodes the value at a particular field in a JavaScript object.
  */
-declare function field<A>(name: string, decoder: Decoder<A>): Decoder<A>;
+export declare const field: <A>(name: string, decoder: Decoder<A>) => Decoder<A>;
 /**
  * Decodes the value at a particular path in a nested JavaScript object.
  */
-declare function at<A>(path: Array<number | string>, decoder: Decoder<A>): Decoder<A>;
+export declare const at: <A>(path: (string | number)[], decoder: Decoder<A>) => Decoder<A>;
 /**
  * Makes any decoder optional.
  */
-declare function maybe<A>(decoder: Decoder<A>): Decoder<Maybe<A>>;
+export declare const maybe: <A>(decoder: Decoder<A>) => Decoder<Maybe<A>>;
 /**
  * Applies a series of decoders, in order, until one succeeds or they all
  * fail.
  */
-declare function oneOf<A>(decoders: Array<Decoder<A>>): Decoder<A>;
-export default Decoder;
-export { string, number, boolean, array, field, succeed, at, maybe, oneOf, fail };
+export declare const oneOf: <A>(decoders: Decoder<A>[]) => Decoder<A>;

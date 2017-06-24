@@ -91,129 +91,129 @@ var Decoder = (function () {
     };
     return Decoder;
 }());
+exports.default = Decoder;
 /**
  * Returns a decoder that always succeeds, resolving to the value passed in.
  */
-function succeed(value) {
-    return new Decoder(function (_) { return resulty_1.ok(value); });
-}
-exports.succeed = succeed;
+exports.succeed = function (value) { return new Decoder(function (_) { return resulty_1.ok(value); }); };
 /**
  * Returns a decoder that always fails, returning an Err with the message
  * passed in.
  */
-function fail(message) {
-    return new Decoder(function (_) { return resulty_1.err(message); });
-}
-exports.fail = fail;
+exports.fail = function (message) { return new Decoder(function (_) { return resulty_1.err(message); }); };
 /**
  * String decoder
  */
-function string() {
+// tslint:disable-next-line:variable-name
+exports.string = function () {
     return new Decoder(function (value) {
         if (typeof value !== 'string') {
-            return resulty_1.err(value + " is not a string");
+            var stringified = JSON.stringify(value);
+            var errorMsg = "Expected to find a string. Instead found " + stringified;
+            return resulty_1.err(errorMsg);
         }
         return resulty_1.ok(value);
     });
-}
-exports.string = string;
+};
 /**
  * Number decoder
  */
-function number() {
+// tslint:disable-next-line:variable-name
+exports.number = function () {
     return new Decoder(function (value) {
         if (typeof value !== 'number') {
-            return resulty_1.err(value + " is not a number");
+            var errorMsg = "Expected to find a number. Instead found " + JSON.stringify(value);
+            return resulty_1.err(errorMsg);
         }
         return resulty_1.ok(value);
     });
-}
-exports.number = number;
+};
 /**
  * Boolean decoder
  */
-function boolean() {
+// tslint:disable-next-line:variable-name
+exports.boolean = function () {
     return new Decoder(function (value) {
         if (typeof value !== 'boolean') {
-            return resulty_1.err("'" + value + "' is not a boolean");
+            var errorMsg = "Expected to find a boolean. Instead found " + JSON.stringify(value);
+            return resulty_1.err(errorMsg);
         }
         return resulty_1.ok(value);
     });
-}
-exports.boolean = boolean;
+};
 /**
  * Applies the `decoder` to all of the elements of an array.
  */
-function array(decoder) {
+exports.array = function (decoder) {
     return new Decoder(function (value) {
         if (!(value instanceof Array)) {
-            return resulty_1.err("'" + value + "' is not an array");
+            var errorMsg = "Expected an array. Instead found " + JSON.stringify(value);
+            return resulty_1.err(errorMsg);
         }
-        return value.reduce(function (memo, element) {
+        return value.reduce(function (memo, element, idx) {
             var result = decoder.decodeAny(element);
             return memo.andThen(function (results) {
-                return result.map(function (v) { return results.concat([v]); });
+                return result
+                    .mapError(function (s) { return "Error found in array at [" + idx + "]: " + s; })
+                    .map(function (v) { return results.concat([v]); });
             });
         }, resulty_1.ok([]));
     });
-}
-exports.array = array;
+};
 /**
  * Decodes the value at a particular field in a JavaScript object.
  */
-function field(name, decoder) {
+exports.field = function (name, decoder) {
     return new Decoder(function (value) {
-        if (!(value.hasOwnProperty(name))) {
-            return resulty_1.err("Expected to find key '" + name + "'");
+        if (!value.hasOwnProperty(name)) {
+            var stringified = JSON.stringify(value);
+            var errorMsg = "Expected to find an object with key '" + name + "'. Instead found " + stringified;
+            return resulty_1.err(errorMsg);
         }
         var v = value[name];
         return decoder.decodeAny(v);
     });
-}
-exports.field = field;
+};
 /**
  * Decodes the value at a particular path in a nested JavaScript object.
  */
-function at(path, decoder) {
+exports.at = function (path, decoder) {
     return new Decoder(function (value) {
         var val = value;
         var idx = 0;
         while (idx < path.length) {
             val = val[path[idx]];
             if (val == null) {
-                return resulty_1.err("Path failure: Expected to find key '" + path.slice(0, idx + 1) + "'");
+                var pathStr = JSON.stringify(path.slice(0, idx + 1));
+                var valueStr = JSON.stringify(value);
+                return resulty_1.err("Path failure: Expected to find path '" + pathStr + "' in " + valueStr);
             }
             idx += 1;
         }
         return decoder.decodeAny(val);
     });
-}
-exports.at = at;
+};
 /**
  * Makes any decoder optional.
  */
-function maybe(decoder) {
+exports.maybe = function (decoder) {
     return new Decoder(function (value) {
         return decoder.decodeAny(value).cata({
             Err: function (e) { return resulty_1.ok(maybeasy_1.nothing()); },
             Ok: function (v) { return resulty_1.ok(maybeasy_1.just(v)); },
         });
     });
-}
-exports.maybe = maybe;
+};
 /**
  * Applies a series of decoders, in order, until one succeeds or they all
  * fail.
  */
-function oneOf(decoders) {
+exports.oneOf = function (decoders) {
     return new Decoder(function (value) {
         var result = decoders.reduce(function (memo, decoder) {
             return memo.orElse(function (_) { return decoder.decodeAny(value); });
         }, resulty_1.err('No decoders specified'));
         return result.mapError(function (m) { return "Unexpected data. Last failure: " + m; });
     });
-}
-exports.oneOf = oneOf;
-exports.default = Decoder;
+};
 //# sourceMappingURL=Decoder.js.map
