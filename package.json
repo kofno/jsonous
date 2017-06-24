@@ -6,6 +6,10 @@
   "types": "dist/index.d.ts",
   "author": "Ryan L. Bell <ryan.l.bell@gmail.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kofno/jsonous.git"
+  },
   "scripts": {
     "docs": "typedoc --out docs --theme minimal && touch docs/.nojekyll",
     "test": "ts-node node_modules/tape/bin/tape tests/**/*.ts | tap-spec"
