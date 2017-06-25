@@ -171,7 +171,9 @@ exports.field = function (name, decoder) {
             return resulty_1.err(errorMsg);
         }
         var v = value[name];
-        return decoder.decodeAny(v);
+        return decoder
+            .decodeAny(v)
+            .mapError(function (err) { return "Error found in field '" + name + "' of " + JSON.stringify(value) + ": " + err; });
     });
 };
 /**

@@ -184,7 +184,9 @@ export const field = <A>(name: string, decoder: Decoder<A>): Decoder<A> =>
     }
 
     const v = value[name];
-    return decoder.decodeAny(v);
+    return decoder
+      .decodeAny(v)
+      .mapError(err => `Error found in field '${name}' of ${JSON.stringify(value)}: ${err}`);
   });
 
 /**
