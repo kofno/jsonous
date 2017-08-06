@@ -155,6 +155,16 @@ export const boolean: Decoder<boolean> = new Decoder<boolean>(value => {
 });
 
 /**
+ * Date decoder.
+ */
+export const date: Decoder<Date> = new Decoder<Date>(value => {
+  const d = new Date(value);
+  const errMsg = (v: any) =>
+    `Expected a date. Instead found ${JSON.stringify(v)}.`;
+  return isNaN(d.getTime()) ? err(errMsg(value)) : ok(d);
+});
+
+/**
  * Applies the `decoder` to all of the elements of an array.
  */
 export const array = <A>(decoder: Decoder<A>): Decoder<A[]> =>

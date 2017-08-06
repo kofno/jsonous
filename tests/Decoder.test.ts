@@ -4,6 +4,7 @@ import {
   array,
   at,
   boolean,
+  date,
   field,
   maybe,
   number,
@@ -49,6 +50,20 @@ test('boolean decoder', t => {
   boolean.decodeJson('"foo"').cata({
     Err: m => t.pass(`boolean decoder failed: ${m}`),
     Ok: v => t.fail(`boolean decoder should have failed on ${v}`),
+  });
+
+  t.end();
+});
+
+test('date decoder', t => {
+  date.decodeJson('"12/1/2016"').cata({
+    Err: m => t.fail(`date decoder should have passed: ${m}`),
+    Ok: v => t.pass(`date decoder worked on ${v}`),
+  });
+
+  date.decodeJson('"foo"').cata({
+    Err: m => t.pass(`date decoder failed: ${m}`),
+    Ok: v => t.fail(`Expected date decoder to fail: ${v}`),
   });
 
   t.end();

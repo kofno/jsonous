@@ -138,6 +138,16 @@ exports.boolean = new Decoder(function (value) {
     return resulty_1.ok(value);
 });
 /**
+ * Date decoder.
+ */
+exports.date = new Decoder(function (value) {
+    var d = new Date(value);
+    var errMsg = function (v) {
+        return "Expected a date. Instead found " + JSON.stringify(v) + ".";
+    };
+    return isNaN(d.getTime()) ? resulty_1.err(errMsg(value)) : resulty_1.ok(d);
+});
+/**
  * Applies the `decoder` to all of the elements of an array.
  */
 exports.array = function (decoder) {

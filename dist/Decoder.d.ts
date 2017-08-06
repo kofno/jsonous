@@ -76,6 +76,10 @@ export declare const number: Decoder<number>;
  */
 export declare const boolean: Decoder<boolean>;
 /**
+ * Date decoder.
+ */
+export declare const date: Decoder<Date>;
+/**
  * Applies the `decoder` to all of the elements of an array.
  */
 export declare const array: <A>(decoder: Decoder<A>) => Decoder<A[]>;
