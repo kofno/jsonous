@@ -100,47 +100,43 @@ exports.succeed = function (value) { return new Decoder(function (_) { return re
  * Returns a decoder that always fails, returning an Err with the message
  * passed in.
  */
-exports.fail = function (message) { return new Decoder(function (_) { return resulty_1.err(message); }); };
+exports.fail = function (message) {
+    return new Decoder(function (_) { return resulty_1.err(message); });
+};
 /**
  * String decoder
  */
 // tslint:disable-next-line:variable-name
-exports.string = function () {
-    return new Decoder(function (value) {
-        if (typeof value !== 'string') {
-            var stringified = JSON.stringify(value);
-            var errorMsg = "Expected to find a string. Instead found " + stringified;
-            return resulty_1.err(errorMsg);
-        }
-        return resulty_1.ok(value);
-    });
-};
+exports.string = new Decoder(function (value) {
+    if (typeof value !== 'string') {
+        var stringified = JSON.stringify(value);
+        var errorMsg = "Expected to find a string. Instead found " + stringified;
+        return resulty_1.err(errorMsg);
+    }
+    return resulty_1.ok(value);
+});
 /**
  * Number decoder
  */
 // tslint:disable-next-line:variable-name
-exports.number = function () {
-    return new Decoder(function (value) {
-        if (typeof value !== 'number') {
-            var errorMsg = "Expected to find a number. Instead found " + JSON.stringify(value);
-            return resulty_1.err(errorMsg);
-        }
-        return resulty_1.ok(value);
-    });
-};
+exports.number = new Decoder(function (value) {
+    if (typeof value !== 'number') {
+        var errorMsg = "Expected to find a number. Instead found " + JSON.stringify(value);
+        return resulty_1.err(errorMsg);
+    }
+    return resulty_1.ok(value);
+});
 /**
  * Boolean decoder
  */
 // tslint:disable-next-line:variable-name
-exports.boolean = function () {
-    return new Decoder(function (value) {
-        if (typeof value !== 'boolean') {
-            var errorMsg = "Expected to find a boolean. Instead found " + JSON.stringify(value);
-            return resulty_1.err(errorMsg);
-        }
-        return resulty_1.ok(value);
-    });
-};
+exports.boolean = new Decoder(function (value) {
+    if (typeof value !== 'boolean') {
+        var errorMsg = "Expected to find a boolean. Instead found " + JSON.stringify(value);
+        return resulty_1.err(errorMsg);
+    }
+    return resulty_1.ok(value);
+});
 /**
  * Applies the `decoder` to all of the elements of an array.
  */
@@ -173,7 +169,9 @@ exports.field = function (name, decoder) {
         var v = value[name];
         return decoder
             .decodeAny(v)
-            .mapError(function (err) { return "Error found in field '" + name + "' of " + JSON.stringify(value) + ": " + err; });
+            .mapError(function (err) {
+            return "Error found in field '" + name + "' of " + JSON.stringify(value) + ": " + err;
+        });
     });
 };
 /**

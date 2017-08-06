@@ -66,15 +66,15 @@ export declare const fail: (message: string) => Decoder<any>;
 /**
  * String decoder
  */
-export declare const string: () => Decoder<string>;
+export declare const string: Decoder<string>;
 /**
  * Number decoder
  */
-export declare const number: () => Decoder<number>;
+export declare const number: Decoder<number>;
 /**
  * Boolean decoder
  */
-export declare const boolean: () => Decoder<boolean>;
+export declare const boolean: Decoder<boolean>;
 /**
  * Applies the `decoder` to all of the elements of an array.
  */

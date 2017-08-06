@@ -107,50 +107,52 @@ export const succeed = <A>(value: A) => new Decoder(_ => ok(value));
  * Returns a decoder that always fails, returning an Err with the message
  * passed in.
  */
-export const fail = (message: string): Decoder<any> => new Decoder(_ => err(message));
+export const fail = (message: string): Decoder<any> =>
+  new Decoder(_ => err(message));
 
 /**
  * String decoder
  */
 // tslint:disable-next-line:variable-name
-export const string = (): Decoder<string> =>
-  new Decoder<string>(value => {
-    if (typeof value !== 'string') {
-      const stringified = JSON.stringify(value);
-      const errorMsg = `Expected to find a string. Instead found ${stringified}`;
-      return err(errorMsg);
-    }
+export const string: Decoder<string> = new Decoder<string>(value => {
+  if (typeof value !== 'string') {
+    const stringified = JSON.stringify(value);
+    const errorMsg = `Expected to find a string. Instead found ${stringified}`;
+    return err(errorMsg);
+  }
 
-    return ok(value);
-  });
+  return ok(value);
+});
 
 /**
  * Number decoder
  */
 // tslint:disable-next-line:variable-name
-export const number = (): Decoder<number> =>
-  new Decoder<number>(value => {
-    if (typeof value !== 'number') {
-      const errorMsg = `Expected to find a number. Instead found ${JSON.stringify(value)}`;
-      return err(errorMsg);
-    }
+export const number: Decoder<number> = new Decoder<number>(value => {
+  if (typeof value !== 'number') {
+    const errorMsg = `Expected to find a number. Instead found ${JSON.stringify(
+      value,
+    )}`;
+    return err(errorMsg);
+  }
 
-    return ok(value);
-  });
+  return ok(value);
+});
 
 /**
  * Boolean decoder
  */
 // tslint:disable-next-line:variable-name
-export const boolean = (): Decoder<boolean> =>
-  new Decoder<boolean>(value => {
-    if (typeof value !== 'boolean') {
-      const errorMsg = `Expected to find a boolean. Instead found ${JSON.stringify(value)}`;
-      return err(errorMsg);
-    }
+export const boolean: Decoder<boolean> = new Decoder<boolean>(value => {
+  if (typeof value !== 'boolean') {
+    const errorMsg = `Expected to find a boolean. Instead found ${JSON.stringify(
+      value,
+    )}`;
+    return err(errorMsg);
+  }
 
-    return ok(value);
-  });
+  return ok(value);
+});
 
 /**
  * Applies the `decoder` to all of the elements of an array.
@@ -158,7 +160,9 @@ export const boolean = (): Decoder<boolean> =>
 export const array = <A>(decoder: Decoder<A>): Decoder<A[]> =>
   new Decoder<A[]>(value => {
     if (!(value instanceof Array)) {
-      const errorMsg = `Expected an array. Instead found ${JSON.stringify(value)}`;
+      const errorMsg = `Expected an array. Instead found ${JSON.stringify(
+        value,
+      )}`;
       return err(errorMsg) as Result<string, A[]>;
     }
 
@@ -186,13 +190,19 @@ export const field = <A>(name: string, decoder: Decoder<A>): Decoder<A> =>
     const v = value[name];
     return decoder
       .decodeAny(v)
-      .mapError(err => `Error found in field '${name}' of ${JSON.stringify(value)}: ${err}`);
+      .mapError(
+        err =>
+          `Error found in field '${name}' of ${JSON.stringify(value)}: ${err}`,
+      );
   });
 
 /**
  * Decodes the value at a particular path in a nested JavaScript object.
  */
-export const at = <A>(path: Array<number | string>, decoder: Decoder<A>): Decoder<A> =>
+export const at = <A>(
+  path: Array<number | string>,
+  decoder: Decoder<A>,
+): Decoder<A> =>
   new Decoder<A>(value => {
     let val = value;
     let idx = 0;
@@ -201,7 +211,9 @@ export const at = <A>(path: Array<number | string>, decoder: Decoder<A>): Decode
       if (val == null) {
         const pathStr = JSON.stringify(path.slice(0, idx + 1));
         const valueStr = JSON.stringify(value);
-        return err(`Path failure: Expected to find path '${pathStr}' in ${valueStr}`);
+        return err(
+          `Path failure: Expected to find path '${pathStr}' in ${valueStr}`,
+        );
       }
       idx += 1;
     }
