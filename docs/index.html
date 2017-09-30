@@ -934,29 +934,29 @@ img { max-width: 100%; }
 			<h2 id="primitives">primitives</h2>
 			<p>There are several decoders for handling JSON primitives; strings, numbers,
 			booleans, and arrays (more on objects later)</p>
-			<pre><code><span class="hljs-function"><span class="hljs-title">string</span><span class="hljs-params">()</span></span>.decodeJson(<span class="hljs-string">'"foo"'</span>)   <span class="hljs-comment">// --&gt; Ok("foo")</span>
-<span class="hljs-function"><span class="hljs-title">string</span><span class="hljs-params">()</span></span>.decodeJson(<span class="hljs-string">'42'</span>)      <span class="hljs-comment">// --&gt; Err("42 is not a string")</span>
+			<pre><code><span class="hljs-selector-tag">string</span><span class="hljs-selector-class">.decodeJson</span>(<span class="hljs-string">'"foo"'</span>)   <span class="hljs-comment">// --&gt; Ok("foo")</span>
+<span class="hljs-selector-tag">string</span><span class="hljs-selector-class">.decodeJson</span>(<span class="hljs-string">'42'</span>)      <span class="hljs-comment">// --&gt; Err("42 is not a string")</span>
 
-<span class="hljs-function"><span class="hljs-title">number</span><span class="hljs-params">()</span></span>.decodeJson(<span class="hljs-string">'42'</span>)      <span class="hljs-comment">// --&gt; Ok(42)</span>
-<span class="hljs-function"><span class="hljs-title">number</span><span class="hljs-params">()</span></span>.decodeJson(<span class="hljs-string">'"foo"'</span>)   <span class="hljs-comment">// --&gt; Err("foo is not a number")</span>
+<span class="hljs-selector-tag">number</span><span class="hljs-selector-class">.decodeJson</span>(<span class="hljs-string">'42'</span>)      <span class="hljs-comment">// --&gt; Ok(42)</span>
+<span class="hljs-selector-tag">number</span><span class="hljs-selector-class">.decodeJson</span>(<span class="hljs-string">'"foo"'</span>)   <span class="hljs-comment">// --&gt; Err("foo is not a number")</span>
 
-<span class="hljs-function"><span class="hljs-title">boolean</span><span class="hljs-params">()</span></span>.decodeJson(<span class="hljs-string">'true'</span>)   <span class="hljs-comment">// --&gt; Ok(true)</span>
-<span class="hljs-function"><span class="hljs-title">boolean</span><span class="hljs-params">()</span></span>.decodeJson(<span class="hljs-string">'"foo"'</span>)  <span class="hljs-comment">// --&gt; Err("foo is not a boolean")</span>
+<span class="hljs-selector-tag">boolean</span><span class="hljs-selector-class">.decodeJson</span>(<span class="hljs-string">'true'</span>)   <span class="hljs-comment">// --&gt; Ok(true)</span>
+<span class="hljs-selector-tag">boolean</span><span class="hljs-selector-class">.decodeJson</span>(<span class="hljs-string">'"foo"'</span>)  <span class="hljs-comment">// --&gt; Err("foo is not a boolean")</span>
 </code></pre><p>The array primitive applies another decoder to an array of values.</p>
-			<pre><code><span class="hljs-function"><span class="hljs-title">array</span><span class="hljs-params">(string()</span></span>).decodeJson(<span class="hljs-string">'["foo", "bar"]'</span>) <span class="hljs-comment">// --&gt; Ok(["foo", "bar"])</span>
-<span class="hljs-function"><span class="hljs-title">array</span><span class="hljs-params">(string()</span></span>).decodeJson(<span class="hljs-string">'["foo", 42]'</span>)    <span class="hljs-comment">// --&gt; Err("42 is not a string")</span>
+			<pre><code><span class="hljs-function"><span class="hljs-title">array</span><span class="hljs-params">(string)</span></span>.decodeJson(<span class="hljs-string">'["foo", "bar"]'</span>) <span class="hljs-comment">// --&gt; Ok(["foo", "bar"])</span>
+<span class="hljs-function"><span class="hljs-title">array</span><span class="hljs-params">(string)</span></span>.decodeJson(<span class="hljs-string">'["foo", 42]'</span>)    <span class="hljs-comment">// --&gt; Err("42 is not a string")</span>
 </code></pre><p>The <code>field</code> and <code>at</code> decoders are used to extract values from objects.</p>
-			<pre><code><span class="hljs-selector-tag">field</span>(<span class="hljs-string">'bar'</span>, string())<span class="hljs-selector-class">.decodeAny</span>({ <span class="hljs-attribute">bar</span>: <span class="hljs-string">'baz'</span> }) <span class="hljs-comment">// --&gt; Ok('baz')</span>
-<span class="hljs-selector-tag">at</span>([<span class="hljs-string">'foo'</span>, <span class="hljs-number">0</span>, <span class="hljs-string">'bar'</span>], number())<span class="hljs-selector-class">.decodeAny</span>({ <span class="hljs-attribute">foo</span>: [{ <span class="hljs-attribute">bar</span>: <span class="hljs-number">42</span> }] }) <span class="hljs-comment">// --&gt; Ok(42)</span>
+			<pre><code><span class="hljs-selector-tag">field</span>(<span class="hljs-string">'bar'</span>, string)<span class="hljs-selector-class">.decodeAny</span>({ <span class="hljs-attribute">bar</span>: <span class="hljs-string">'baz'</span> }) <span class="hljs-comment">// --&gt; Ok('baz')</span>
+<span class="hljs-selector-tag">at</span>([<span class="hljs-string">'foo'</span>, <span class="hljs-number">0</span>, <span class="hljs-string">'bar'</span>], number)<span class="hljs-selector-class">.decodeAny</span>({ <span class="hljs-attribute">foo</span>: [{ <span class="hljs-attribute">bar</span>: <span class="hljs-number">42</span> }] }) <span class="hljs-comment">// --&gt; Ok(42)</span>
 </code></pre><p>Object decoders can be chained together to build more complex data structures.</p>
-			<pre><code><span class="hljs-function"><span class="hljs-title">field</span><span class="hljs-params">(<span class="hljs-string">'userId'</span>, number()</span></span>).andThen(id =&gt;
-<span class="hljs-function"><span class="hljs-title">field</span><span class="hljs-params">(<span class="hljs-string">'emailAddress'</span>, string()</span></span>).andThen(email =&gt;
+			<pre><code><span class="hljs-function"><span class="hljs-title">field</span><span class="hljs-params">(<span class="hljs-string">'userId'</span>, number)</span></span>.andThen(id =&gt;
+<span class="hljs-function"><span class="hljs-title">field</span><span class="hljs-params">(<span class="hljs-string">'emailAddress'</span>, string)</span></span>.andThen(email =&gt;
 <span class="hljs-function"><span class="hljs-title">succeed</span><span class="hljs-params">({ id, email })</span></span>))
   .decodeAny({ userId: <span class="hljs-number">213</span>, emailAddress: <span class="hljs-string">'foo@example.com'</span> })
   <span class="hljs-comment">// --&gt; Ok({ id: 213, email: 'foo@example.com'})</span>
 </code></pre><p>Of course, your code editor may try to reformat this code.</p>
-			<pre><code>field(<span class="hljs-string">'userId'</span>, <span class="hljs-built_in">number</span>()).andThen(<span class="hljs-function"><span class="hljs-params">id</span> =&gt;</span>
-  field(<span class="hljs-string">'emailAddress'</span>, <span class="hljs-built_in">string</span>()).andThen(<span class="hljs-function"><span class="hljs-params">email</span> =&gt;</span>
+			<pre><code>field(<span class="hljs-string">'userId'</span>, <span class="hljs-built_in">number</span>).andThen(<span class="hljs-function"><span class="hljs-params">id</span> =&gt;</span>
+  field(<span class="hljs-string">'emailAddress'</span>, <span class="hljs-built_in">string</span>).andThen(<span class="hljs-function"><span class="hljs-params">email</span> =&gt;</span>
     succeed({ id, email })))
   .decodeAny({ userId: <span class="hljs-number">213</span>, emailAddress: <span class="hljs-string">'foo@example.com'</span> })
   <span class="hljs-comment">// --&gt; Ok({ id: 213, email: 'foo@example.com'})</span>
@@ -964,8 +964,8 @@ img { max-width: 100%; }
 			<p>Objects can also be built using the applicative style.</p>
 			<pre><code><span class="hljs-keyword">const</span> ctor = <span class="hljs-function">(<span class="hljs-params">id: <span class="hljs-built_in">number</span></span>) =&gt;</span> (email: <span class="hljs-built_in">string</span>) =&gt; ({ id, email });
 <span class="hljs-keyword">const</span> decoder = succeed(ctor)
-  .ap(field(<span class="hljs-string">'userId'</span>, <span class="hljs-built_in">number</span>()))
-  .ap(field(<span class="hljs-string">'emailAddress'</span>, <span class="hljs-built_in">string</span>()));
+  .ap(field(<span class="hljs-string">'userId'</span>, <span class="hljs-built_in">number</span>))
+  .ap(field(<span class="hljs-string">'emailAddress'</span>, <span class="hljs-built_in">string</span>));
 
 decoder.decodeAny({ userId: <span class="hljs-number">213</span>, emailAddress: <span class="hljs-string">'foo@example.com'</span> })
 <span class="hljs-comment">// --&gt; Ok({ id: 213, email: 'foo@example.com'})</span>
