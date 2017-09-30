@@ -107,8 +107,7 @@ export const succeed = <A>(value: A) => new Decoder(_ => ok(value));
  * Returns a decoder that always fails, returning an Err with the message
  * passed in.
  */
-export const fail = (message: string): Decoder<any> =>
-  new Decoder(_ => err(message));
+export const fail = (message: string): Decoder<any> => new Decoder(_ => err(message));
 
 /**
  * String decoder
@@ -130,9 +129,7 @@ export const string: Decoder<string> = new Decoder<string>(value => {
 // tslint:disable-next-line:variable-name
 export const number: Decoder<number> = new Decoder<number>(value => {
   if (typeof value !== 'number') {
-    const errorMsg = `Expected to find a number. Instead found ${JSON.stringify(
-      value,
-    )}`;
+    const errorMsg = `Expected to find a number. Instead found ${JSON.stringify(value)}`;
     return err(errorMsg);
   }
 
@@ -145,9 +142,7 @@ export const number: Decoder<number> = new Decoder<number>(value => {
 // tslint:disable-next-line:variable-name
 export const boolean: Decoder<boolean> = new Decoder<boolean>(value => {
   if (typeof value !== 'boolean') {
-    const errorMsg = `Expected to find a boolean. Instead found ${JSON.stringify(
-      value,
-    )}`;
+    const errorMsg = `Expected to find a boolean. Instead found ${JSON.stringify(value)}`;
     return err(errorMsg);
   }
 
@@ -159,8 +154,7 @@ export const boolean: Decoder<boolean> = new Decoder<boolean>(value => {
  */
 export const date: Decoder<Date> = new Decoder<Date>(value => {
   const d = new Date(value);
-  const errMsg = (v: any) =>
-    `Expected a date. Instead found ${JSON.stringify(v)}.`;
+  const errMsg = (v: any) => `Expected a date. Instead found ${JSON.stringify(v)}.`;
   return isNaN(d.getTime()) ? err(errMsg(value)) : ok(d);
 });
 
@@ -170,9 +164,7 @@ export const date: Decoder<Date> = new Decoder<Date>(value => {
 export const array = <A>(decoder: Decoder<A>): Decoder<A[]> =>
   new Decoder<A[]>(value => {
     if (!(value instanceof Array)) {
-      const errorMsg = `Expected an array. Instead found ${JSON.stringify(
-        value,
-      )}`;
+      const errorMsg = `Expected an array. Instead found ${JSON.stringify(value)}`;
       return err(errorMsg) as Result<string, A[]>;
     }
 
@@ -200,19 +192,13 @@ export const field = <A>(name: string, decoder: Decoder<A>): Decoder<A> =>
     const v = value[name];
     return decoder
       .decodeAny(v)
-      .mapError(
-        err =>
-          `Error found in field '${name}' of ${JSON.stringify(value)}: ${err}`,
-      );
+      .mapError(err => `Error found in field '${name}' of ${JSON.stringify(value)}: ${err}`);
   });
 
 /**
  * Decodes the value at a particular path in a nested JavaScript object.
  */
-export const at = <A>(
-  path: Array<number | string>,
-  decoder: Decoder<A>,
-): Decoder<A> =>
+export const at = <A>(path: Array<number | string>, decoder: Decoder<A>): Decoder<A> =>
   new Decoder<A>(value => {
     let val = value;
     let idx = 0;
@@ -221,9 +207,7 @@ export const at = <A>(
       if (val == null) {
         const pathStr = JSON.stringify(path.slice(0, idx + 1));
         const valueStr = JSON.stringify(value);
-        return err(
-          `Path failure: Expected to find path '${pathStr}' in ${valueStr}`,
-        );
+        return err(`Path failure: Expected to find path '${pathStr}' in ${valueStr}`);
       }
       idx += 1;
     }
@@ -231,7 +215,8 @@ export const at = <A>(
   });
 
 /**
- * Makes any decoder optional.
+ * Makes any decoder optional. Be aware that this can mask a failing
+ * decoder because it makes any failed decoder result a nothing.
  */
 export const maybe = <A>(decoder: Decoder<A>): Decoder<Maybe<A>> =>
   new Decoder(value => {
@@ -242,14 +227,43 @@ export const maybe = <A>(decoder: Decoder<A>): Decoder<Maybe<A>> =>
   });
 
 /**
+ * Decodes possibly null or undefined values into types.
+ * There is overlap between `nullable` and `maybe` decoders.
+ * The difference is that `maybe` will always succeed, even if
+ * there is an error in the decoder.
+ *
+ * Maybe example:
+ *
+ *     maybe(string).decodeAny('foo') // => Ok('foo')
+ *     maybe(string).decodeAny(null)  // => Ok(Nothing)
+ *     maybe(string).decodeAny(42)    // => Ok(Nothing)
+ *
+ * Nullable example:
+ *
+ *     nullable(string).decodeAny('foo') // => Ok('foo')
+ *     nullable(string).decodeAny(null)  // => Ok(Nothing)
+ *     nullable(string).decodeAny(42)    // => Err...
+ */
+export const nullable = <A>(decoder: Decoder<A>): Decoder<Maybe<A>> =>
+  new Decoder(value => {
+    if (value == null) {
+      return ok(nothing());
+    }
+    return decoder.decodeAny(value).map(just);
+  });
+
+/**
  * Applies a series of decoders, in order, until one succeeds or they all
  * fail.
  */
 export const oneOf = <A>(decoders: Array<Decoder<A>>): Decoder<A> =>
   new Decoder(value => {
-    const result = decoders.reduce((memo, decoder) => {
-      return memo.orElse(_ => decoder.decodeAny(value));
-    }, err('No decoders specified') as Result<string, A>);
+    const result = decoders.reduce(
+      (memo, decoder) => {
+        return memo.orElse(_ => decoder.decodeAny(value));
+      },
+      err('No decoders specified') as Result<string, A>,
+    );
 
     return result.mapError(m => `Unexpected data. Last failure: ${m}`);
   });
