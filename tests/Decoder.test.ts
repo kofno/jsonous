@@ -11,7 +11,7 @@ import {
   oneOf,
   string,
   succeed,
-} from '../src/Decoder';
+} from '../src/index';
 
 test('string decoder', t => {
   string.decodeJson('"foo"').cata({
