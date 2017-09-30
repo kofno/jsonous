@@ -9,8 +9,7 @@
         "strictNullChecks": true,
         "sourceMap": true,
         "declaration": true,
-        "outDir": "dist",
-        "watch": true
+        "outDir": "dist"
     },
     "include": [
         "src/**/*"
