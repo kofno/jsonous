@@ -27,37 +27,37 @@ such a solution.
 There are several decoders for handling JSON primitives; strings, numbers,
 booleans, and arrays (more on objects later)
 
-    string().decodeJson('"foo"')   // --> Ok("foo")
-    string().decodeJson('42')      // --> Err("42 is not a string")
+    string.decodeJson('"foo"')   // --> Ok("foo")
+    string.decodeJson('42')      // --> Err("42 is not a string")
 
-    number().decodeJson('42')      // --> Ok(42)
-    number().decodeJson('"foo"')   // --> Err("foo is not a number")
+    number.decodeJson('42')      // --> Ok(42)
+    number.decodeJson('"foo"')   // --> Err("foo is not a number")
 
-    boolean().decodeJson('true')   // --> Ok(true)
-    boolean().decodeJson('"foo"')  // --> Err("foo is not a boolean")
+    boolean.decodeJson('true')   // --> Ok(true)
+    boolean.decodeJson('"foo"')  // --> Err("foo is not a boolean")
 
 The array primitive applies another decoder to an array of values.
 
-    array(string()).decodeJson('["foo", "bar"]') // --> Ok(["foo", "bar"])
-    array(string()).decodeJson('["foo", 42]')    // --> Err("42 is not a string")
+    array(string).decodeJson('["foo", "bar"]') // --> Ok(["foo", "bar"])
+    array(string).decodeJson('["foo", 42]')    // --> Err("42 is not a string")
 
 The `field` and `at` decoders are used to extract values from objects.
 
-    field('bar', string()).decodeAny({ bar: 'baz' }) // --> Ok('baz')
-    at(['foo', 0, 'bar'], number()).decodeAny({ foo: [{ bar: 42 }] }) // --> Ok(42)
+    field('bar', string).decodeAny({ bar: 'baz' }) // --> Ok('baz')
+    at(['foo', 0, 'bar'], number).decodeAny({ foo: [{ bar: 42 }] }) // --> Ok(42)
 
 Object decoders can be chained together to build more complex data structures.
 
-    field('userId', number()).andThen(id =>
-    field('emailAddress', string()).andThen(email =>
+    field('userId', number).andThen(id =>
+    field('emailAddress', string).andThen(email =>
     succeed({ id, email })))
       .decodeAny({ userId: 213, emailAddress: 'foo@example.com' })
       // --> Ok({ id: 213, email: 'foo@example.com'})
 
 Of course, your code editor may try to reformat this code.
 
-    field('userId', number()).andThen(id =>
-      field('emailAddress', string()).andThen(email =>
+    field('userId', number).andThen(id =>
+      field('emailAddress', string).andThen(email =>
         succeed({ id, email })))
       .decodeAny({ userId: 213, emailAddress: 'foo@example.com' })
       // --> Ok({ id: 213, email: 'foo@example.com'})
@@ -68,8 +68,8 @@ Objects can also be built using the applicative style.
 
     const ctor = (id: number) => (email: string) => ({ id, email });
     const decoder = succeed(ctor)
-      .ap(field('userId', number()))
-      .ap(field('emailAddress', string()));
+      .ap(field('userId', number))
+      .ap(field('emailAddress', string));
 
     decoder.decodeAny({ userId: 213, emailAddress: 'foo@example.com' })
     // --> Ok({ id: 213, email: 'foo@example.com'})
