@@ -183,16 +183,22 @@ export const array = <A>(decoder: Decoder<A>): Decoder<A[]> =>
  */
 export const field = <A>(name: string, decoder: Decoder<A>): Decoder<A> =>
   new Decoder<A>(value => {
-    if (!value.hasOwnProperty(name)) {
+    const errorMsg = () => {
       const stringified = JSON.stringify(value);
-      const errorMsg = `Expected to find an object with key '${name}'. Instead found ${stringified}`;
-      return err(errorMsg);
+      const msg = `Expected to find an object with key '${name}'. Instead found ${stringified}`;
+      return err(msg);
+    };
+    if (value == null) {
+      return errorMsg();
+    }
+    if (!value.hasOwnProperty(name)) {
+      return errorMsg();
     }
 
     const v = value[name];
     return decoder
       .decodeAny(v)
-      .mapError(err => `Error found in field '${name}' of ${JSON.stringify(value)}: ${err}`);
+      .mapError(e => `Error found in field '${name}' of ${JSON.stringify(value)}: ${e}`);
   });
 
 /**

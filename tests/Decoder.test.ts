@@ -109,6 +109,13 @@ test('field decoder', t => {
       Ok: v => t.fail(`field decoder should have failed: ${v}`),
     });
 
+  field('foo', string)
+    .decodeAny(null)
+    .cata({
+      Err: m => t.pass(`field decoder failed: ${m}`),
+      Ok: v => t.fail(`field decoder should have failed: ${v}`),
+    });
+
   t.end();
 });
 
