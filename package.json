@@ -2,8 +2,8 @@
   "name": "jsonous",
   "version": "0.0.0-development",
   "description": "Type safe JSON decoding for JavaScript",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "index.js",
+  "types": "index.d.ts",
   "author": "Ryan L. Bell <ryan.l.bell@gmail.com>",
   "license": "MIT",
   "repository": {
@@ -18,16 +18,16 @@
   },
   "devDependencies": {
     "@types/tape": "^4.2.29",
+    "semantic-release": "^8.0.3",
     "tap-spec": "^4.1.1",
     "tape": "^4.6.3",
-    "ts-node": "^3.3.0",
+    "ts-node": "^4.0.2",
     "tslint": "^5.1.0",
     "typedoc": "^0.5.10",
-    "typescript": "^2.4.2",
-    "semantic-release": "^8.0.3"
+    "typescript": "^2.6.2"
   },
   "dependencies": {
-    "maybeasy": "^1.0.2",
-    "resulty": "^1.2.0"
+    "maybeasy": "^2.0.1",
+    "resulty": "^2.0.1"
   }
 }

@@ -173,7 +173,7 @@ export const array = <A>(decoder: Decoder<A>): Decoder<A[]> =>
       return memo.andThen(results => {
         return result
           .mapError(s => `Error found in array at [${idx}]: ${s}`)
-          .map(v => results.concat([v]));
+          .map(v => results.concat([ v ]));
       });
     }, ok([]));
   });
@@ -186,7 +186,7 @@ export const field = <A>(name: string, decoder: Decoder<A>): Decoder<A> =>
     const errorMsg = () => {
       const stringified = JSON.stringify(value);
       const msg = `Expected to find an object with key '${name}'. Instead found ${stringified}`;
-      return err(msg);
+      return err<string, A>(msg);
     };
     if (value == null) {
       return errorMsg();
