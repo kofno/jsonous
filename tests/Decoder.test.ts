@@ -118,6 +118,11 @@ test('at decoder', t => {
     Ok: v => t.fail(`at should have failed: ${v}`),
   });
 
+  at([ 'foo', 0, 'bar' ], nullable(number)).decodeAny({ foo: [ { bar: null } ] }).cata({
+    Err: m => t.fail("at should be compatible with nullable"),
+		Ok: v => t.pass(`at is compatible with nullable`)
+  });
+
   t.end();
 });
 

@@ -210,7 +210,7 @@ export const at = <A>(path: Array<number | string>, decoder: Decoder<A>): Decode
     let idx = 0;
     while (idx < path.length) {
       val = val[path[idx]];
-      if (val == null) {
+      if (val === undefined) {
         const pathStr = JSON.stringify(path.slice(0, idx + 1));
         const valueStr = JSON.stringify(value);
         return err(`Path failure: Expected to find path '${pathStr}' in ${valueStr}`);
