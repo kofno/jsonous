@@ -11,7 +11,7 @@ export type DecoderFn<A> = (thing: any) => Result<string, A>;
  * from JSON or from an <any> typed object.
  */
 export default class Decoder<A> {
-  private fn: DecoderFn<A>;
+  private readonly fn: DecoderFn<A>;
 
   constructor(thisFn: DecoderFn<A>) {
     this.fn = thisFn;
@@ -107,7 +107,8 @@ export const succeed = <A>(value: A) => new Decoder(_ => ok(value));
  * Returns a decoder that always fails, returning an Err with the message
  * passed in.
  */
-export const fail = (message: string): Decoder<any> => new Decoder(_ => err(message));
+export const fail = (message: string): Decoder<any> =>
+  new Decoder(_ => err(message));
 
 /**
  * String decoder
@@ -116,7 +117,7 @@ export const fail = (message: string): Decoder<any> => new Decoder(_ => err(mess
 export const string: Decoder<string> = new Decoder<string>(value => {
   if (typeof value !== 'string') {
     const stringified = JSON.stringify(value);
-    const errorMsg = `Expected to find a string. Instead found ${stringified}`;
+    const errorMsg = `I expected to find a string but instead I found ${stringified}.`;
     return err(errorMsg);
   }
 
@@ -129,7 +130,9 @@ export const string: Decoder<string> = new Decoder<string>(value => {
 // tslint:disable-next-line:variable-name
 export const number: Decoder<number> = new Decoder<number>(value => {
   if (typeof value !== 'number') {
-    const errorMsg = `Expected to find a number. Instead found ${JSON.stringify(value)}`;
+    const errorMsg = `I expected to find a number but instead I found ${JSON.stringify(
+      value
+    )}.`;
     return err(errorMsg);
   }
 
@@ -142,7 +145,9 @@ export const number: Decoder<number> = new Decoder<number>(value => {
 // tslint:disable-next-line:variable-name
 export const boolean: Decoder<boolean> = new Decoder<boolean>(value => {
   if (typeof value !== 'boolean') {
-    const errorMsg = `Expected to find a boolean. Instead found ${JSON.stringify(value)}`;
+    const errorMsg = `I expected to find a boolean but instead found ${JSON.stringify(
+      value
+    )}.`;
     return err(errorMsg);
   }
 
@@ -154,7 +159,8 @@ export const boolean: Decoder<boolean> = new Decoder<boolean>(value => {
  */
 export const date: Decoder<Date> = new Decoder<Date>(value => {
   const d = new Date(value);
-  const errMsg = (v: any) => `Expected a date. Instead found ${JSON.stringify(v)}.`;
+  const errMsg = (v: any) =>
+    `I expected a date but instead I found ${JSON.stringify(v)}.`;
   return isNaN(d.getTime()) ? err(errMsg(value)) : ok(d);
 });
 
@@ -164,7 +170,9 @@ export const date: Decoder<Date> = new Decoder<Date>(value => {
 export const array = <A>(decoder: Decoder<A>): Decoder<A[]> =>
   new Decoder<A[]>(value => {
     if (!(value instanceof Array)) {
-      const errorMsg = `Expected an array. Instead found ${JSON.stringify(value)}`;
+      const errorMsg = `I expected an array but instead I found ${JSON.stringify(
+        value
+      )}.`;
       return err(errorMsg) as Result<string, A[]>;
     }
 
@@ -172,8 +180,8 @@ export const array = <A>(decoder: Decoder<A>): Decoder<A[]> =>
       const result = decoder.decodeAny(element);
       return memo.andThen(results => {
         return result
-          .mapError(s => `Error found in array at [${idx}]: ${s}`)
-          .map(v => results.concat([ v ]));
+          .mapError(s => `I found an error in the array at [${idx}]: ${s}.`)
+          .map(v => results.concat([v]));
       });
     }, ok([]));
   });
@@ -185,7 +193,7 @@ export const field = <A>(name: string, decoder: Decoder<A>): Decoder<A> =>
   new Decoder<A>(value => {
     const errorMsg = () => {
       const stringified = JSON.stringify(value);
-      const msg = `Expected to find an object with key '${name}'. Instead found ${stringified}`;
+      const msg = `I expected to find an object with key '${name}' but instead I found ${stringified}.`;
       return err<string, A>(msg);
     };
     if (value == null) {
@@ -198,13 +206,18 @@ export const field = <A>(name: string, decoder: Decoder<A>): Decoder<A> =>
     const v = value[name];
     return decoder
       .decodeAny(v)
-      .mapError(e => `Error found in field '${name}' of ${JSON.stringify(value)}: ${e}`);
+      .mapError(
+        e => `I found an error in the field named '${name}' of ${JSON.stringify(value)}: ${e}.`
+      );
   });
 
 /**
  * Decodes the value at a particular path in a nested JavaScript object.
  */
-export const at = <A>(path: Array<number | string>, decoder: Decoder<A>): Decoder<A> =>
+export const at = <A>(
+  path: Array<number | string>,
+  decoder: Decoder<A>
+): Decoder<A> =>
   new Decoder<A>(value => {
     let val = value;
     let idx = 0;
@@ -213,7 +226,9 @@ export const at = <A>(path: Array<number | string>, decoder: Decoder<A>): Decode
       if (val === undefined) {
         const pathStr = JSON.stringify(path.slice(0, idx + 1));
         const valueStr = JSON.stringify(value);
-        return err(`Path failure: Expected to find path '${pathStr}' in ${valueStr}`);
+        return err(
+          `I found an error in the 'at' path. I could not find path '${pathStr}' in ${valueStr}.`
+        );
       }
       idx += 1;
     }
@@ -264,12 +279,15 @@ export const nullable = <A>(decoder: Decoder<A>): Decoder<Maybe<A>> =>
  */
 export const oneOf = <A>(decoders: Array<Decoder<A>>): Decoder<A> =>
   new Decoder(value => {
-    const result = decoders.reduce(
-      (memo, decoder) => {
-        return memo.orElse(_ => decoder.decodeAny(value));
-      },
-      err('No decoders specified') as Result<string, A>,
-    );
+    if (decoders.length === 0) {
+      return err<string, A>('No decoders specified.');
+    }
 
-    return result.mapError(m => `Unexpected data. Last failure: ${m}`);
+    const result = decoders.reduce((memo, decoder) => {
+      return memo.orElse(err1 =>
+        decoder.decodeAny(value).mapError(err2 => `${err1}\n${err2}`)
+      );
+    }, err<string, A>(''));
+
+    return result.mapError(m => `I found the following problems:\n${m}`);
   });
