@@ -40,12 +40,16 @@ boolean.decodeJson('true'); // --> Ok(true)
 boolean.decodeJson('"foo"'); // --> Err("foo is not a boolean")
 ```
 
+## arrays
+
 The array primitive applies another decoder to an array of values.
 
 ```typescript
 array(string).decodeJson('["foo", "bar"]'); // --> Ok(["foo", "bar"])
 array(string).decodeJson('["foo", 42]'); // --> Err("42 is not a string")
 ```
+
+## objects
 
 The `field` and `at` decoders are used to extract values from objects.
 
