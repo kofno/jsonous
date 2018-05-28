@@ -14,8 +14,7 @@
     "docs": "typedoc --out docs --theme minimal && touch docs/.nojekyll",
     "test": "ts-node node_modules/tape/bin/tape tests/**/*.ts | tap-spec",
     "build": "tsc",
-    "semantic-release":
-      "semantic-release pre && npm publish && semantic-release post"
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "devDependencies": {
     "@types/tape": "^4.2.29",
@@ -24,7 +23,7 @@
     "tape": "^4.6.3",
     "ts-node": "^4.0.2",
     "tslint": "^5.1.0",
-    "typedoc": "^0.5.10",
+    "typedoc": "^0.11.0",
     "typescript": "^2.6.2"
   },
   "dependencies": {

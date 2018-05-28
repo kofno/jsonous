@@ -1,5 +1,5 @@
-import { just, Maybe, nothing } from 'maybeasy';
-import { err, ok, Result } from 'resulty';
+import { Maybe, just, nothing } from 'maybeasy';
+import { Result, err, ok } from 'resulty';
 
 /**
  * A decoder function takes an object of any type and returns a Result
@@ -11,11 +11,7 @@ export type DecoderFn<A> = (thing: any) => Result<string, A>;
  * from JSON or from an <any> typed object.
  */
 export default class Decoder<A> {
-  private readonly fn: DecoderFn<A>;
-
-  constructor(thisFn: DecoderFn<A>) {
-    this.fn = thisFn;
-  }
+  constructor(private fn: DecoderFn<A>) {}
 
   /**
    * Lifts any function up to operate on the value in the Decoder context.
@@ -37,6 +33,28 @@ export default class Decoder<A> {
   public andThen<B>(f: (a: A) => Decoder<B>): Decoder<B> {
     return new Decoder(value => {
       return this.fn(value).andThen(v => f(v).decodeAny(value));
+    });
+  }
+
+  /**
+   * This is a special case of chaining. Like `andThen`, `assign` allows you
+   * to combine several decoders. With `assign`, we build up an object (or scope)
+   * internally. THe benefit is that is allows you to avoid and the nesting
+   * and callback hell typically associated with using `andThen` to build objects.
+   *
+   * The idea for assign came from this blog:
+   * https://medium.com/@dhruvrajvanshi/simulating-haskells-do-notation-in-typescript-e48a9501751c
+   */
+  public assign<K extends string, B>(
+    k: K,
+    other: Decoder<B> | ((a: A) => Decoder<B>)
+  ): Decoder<A & { [k in K]: B }> {
+    return this.andThen(a => {
+      const decoder = other instanceof Decoder ? other : other(a);
+      return decoder.map<A & { [k in K]: B }>(b => ({
+        ...Object(a),
+        [k.toString()]: b,
+      }));
     });
   }
 
@@ -117,7 +135,7 @@ export const fail = (message: string): Decoder<any> =>
 export const string: Decoder<string> = new Decoder<string>(value => {
   if (typeof value !== 'string') {
     const stringified = JSON.stringify(value);
-    const errorMsg = `I expected to find a string but instead I found ${stringified}.`;
+    const errorMsg = `I expected to find a string but instead I found ${stringified}`;
     return err(errorMsg);
   }
 
@@ -132,7 +150,7 @@ export const number: Decoder<number> = new Decoder<number>(value => {
   if (typeof value !== 'number') {
     const errorMsg = `I expected to find a number but instead I found ${JSON.stringify(
       value
-    )}.`;
+    )}`;
     return err(errorMsg);
   }
 
@@ -147,7 +165,7 @@ export const boolean: Decoder<boolean> = new Decoder<boolean>(value => {
   if (typeof value !== 'boolean') {
     const errorMsg = `I expected to find a boolean but instead found ${JSON.stringify(
       value
-    )}.`;
+    )}`;
     return err(errorMsg);
   }
 
@@ -160,7 +178,7 @@ export const boolean: Decoder<boolean> = new Decoder<boolean>(value => {
 export const date: Decoder<Date> = new Decoder<Date>(value => {
   const d = new Date(value);
   const errMsg = (v: any) =>
-    `I expected a date but instead I found ${JSON.stringify(v)}.`;
+    `I expected a date but instead I found ${JSON.stringify(v)}`;
   return isNaN(d.getTime()) ? err(errMsg(value)) : ok(d);
 });
 
@@ -172,7 +190,7 @@ export const array = <A>(decoder: Decoder<A>): Decoder<A[]> =>
     if (!(value instanceof Array)) {
       const errorMsg = `I expected an array but instead I found ${JSON.stringify(
         value
-      )}.`;
+      )}`;
       return err(errorMsg) as Result<string, A[]>;
     }
 
@@ -180,7 +198,7 @@ export const array = <A>(decoder: Decoder<A>): Decoder<A[]> =>
       const result = decoder.decodeAny(element);
       return memo.andThen(results => {
         return result
-          .mapError(s => `I found an error in the array at [${idx}]: ${s}.`)
+          .mapError(s => `I found an error in the array at [${idx}]: ${s}`)
           .map(v => results.concat([v]));
       });
     }, ok([]));
@@ -193,7 +211,7 @@ export const field = <A>(name: string, decoder: Decoder<A>): Decoder<A> =>
   new Decoder<A>(value => {
     const errorMsg = () => {
       const stringified = JSON.stringify(value);
-      const msg = `I expected to find an object with key '${name}' but instead I found ${stringified}.`;
+      const msg = `I expected to find an object with key '${name}' but instead I found ${stringified}`;
       return err<string, A>(msg);
     };
     if (value == null) {
@@ -207,7 +225,10 @@ export const field = <A>(name: string, decoder: Decoder<A>): Decoder<A> =>
     return decoder
       .decodeAny(v)
       .mapError(
-        e => `I found an error in the field named '${name}' of ${JSON.stringify(value)}: ${e}.`
+        e =>
+          `I found an error in the field named '${name}' of ${JSON.stringify(
+            value
+          )}: ${e}`
       );
   });
 
@@ -227,7 +248,7 @@ export const at = <A>(
         const pathStr = JSON.stringify(path.slice(0, idx + 1));
         const valueStr = JSON.stringify(value);
         return err(
-          `I found an error in the 'at' path. I could not find path '${pathStr}' in ${valueStr}.`
+          `I found an error in the 'at' path. I could not find path '${pathStr}' in ${valueStr}`
         );
       }
       idx += 1;

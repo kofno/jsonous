@@ -190,7 +190,31 @@ test('complex binding', t => {
     .decodeAny({ foo: 'baz', bar: 42 })
     .cata({
       Err: m => t.pass(`decoder failed with: ${m}`),
-      Ok: v => t.pass(`expected decoder to fail: ${v}`),
+      Ok: v => t.fail(`expected decoder to fail: ${v}`),
+    });
+
+  t.end();
+});
+
+test('assign chaining', t => {
+  succeed({})
+    .assign('x', field('foo', number))
+    .assign('y', field('bar', number))
+    .assign('z', scope => succeed(scope.x + scope.y).map(String))
+    .decodeAny({ foo: 42, bar: 8 })
+    .cata({
+      Err: m => t.fail(`decoder should have passed: ${m}`),
+      Ok: v => t.deepEqual(v, { x: 42, y: 8, z: '50' }),
+    });
+
+  succeed({})
+    .assign('x', field('foo', number))
+    .assign('y', field('bar', number))
+    .assign('z', scope => succeed(scope.x + scope.y).map(String))
+    .decodeAny({ foo: 42, bar: 'eight' })
+    .cata({
+      Err: m => t.pass(`decoder expected to fail: ${m}`),
+      Ok: v => t.fail(`Decoder should have failed: ${JSON.stringify(v)}`),
     });
 
   t.end();
