@@ -1,5 +1,5 @@
-import { Maybe, just, nothing } from 'maybeasy';
-import { Result, err, ok } from 'resulty';
+import { just, Maybe, nothing } from 'maybeasy';
+import { err, ok, Result } from 'resulty';
 
 /**
  * A decoder function takes an object of any type and returns a Result
@@ -55,6 +55,19 @@ export default class Decoder<A> {
         ...Object(a),
         [k.toString()]: b,
       }));
+    });
+  }
+
+  /**
+   * Inject a side-effectual operation in the middle of a Decoder chain.
+   * This is a convenient mechanism for debugging decoders using console logging.
+   * I don't reccomend using this mechanusm for making API calls, or anything complex
+   * like that.
+   */
+  public do(fn: (a: A) => void): Decoder<A> {
+    return this.map(v => {
+      fn(v);
+      return v;
     });
   }
 

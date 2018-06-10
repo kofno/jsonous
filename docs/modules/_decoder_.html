@@ -1004,7 +1004,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">Decoder<wbr>Fn<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/kofno/jsonous/blob/5451c2a/src/Decoder.ts#L7">Decoder.ts:7</a></li>
+						<li>Defined in <a href="https://github.com/kofno/jsonous/blob/4a117f8/src/Decoder.ts#L7">Decoder.ts:7</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -1043,7 +1043,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">boolean<span class="tsd-signature-symbol">:</span> <a href="../classes/_decoder_.decoder.html" class="tsd-signature-type">Decoder</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;new Decoder&lt;boolean&gt;(value &#x3D;&gt; {if (typeof value !&#x3D;&#x3D; &#x27;boolean&#x27;) {const errorMsg &#x3D; &#x60;I expected to find a boolean but instead found ${JSON.stringify(value)}&#x60;;return err(errorMsg);}return ok(value);})</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/kofno/jsonous/blob/5451c2a/src/Decoder.ts#L161">Decoder.ts:161</a></li>
+						<li>Defined in <a href="https://github.com/kofno/jsonous/blob/4a117f8/src/Decoder.ts#L174">Decoder.ts:174</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -1058,7 +1058,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">date<span class="tsd-signature-symbol">:</span> <a href="../classes/_decoder_.decoder.html" class="tsd-signature-type">Decoder</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Date</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;new Decoder&lt;Date&gt;(value &#x3D;&gt; {const errMsg &#x3D; (v: any): string &#x3D;&gt; &#x60;I expected a date but instead I found ${JSON.stringify(v)}&#x60;;return ok(value).andThen(s &#x3D;&gt; string.map(v &#x3D;&gt; new Date(v)).decodeAny(s)).orElse(n &#x3D;&gt; number.map(v &#x3D;&gt; new Date(v)).decodeAny(n)).andThen(d &#x3D;&gt; (isNaN(d.getTime()) ? err&lt;any, Date&gt;(value) : ok(d))).mapError(() &#x3D;&gt; errMsg(value));})</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/kofno/jsonous/blob/5451c2a/src/Decoder.ts#L176">Decoder.ts:176</a></li>
+						<li>Defined in <a href="https://github.com/kofno/jsonous/blob/4a117f8/src/Decoder.ts#L189">Decoder.ts:189</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -1075,7 +1075,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">number<span class="tsd-signature-symbol">:</span> <a href="../classes/_decoder_.decoder.html" class="tsd-signature-type">Decoder</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;new Decoder&lt;number&gt;(value &#x3D;&gt; {if (typeof value !&#x3D;&#x3D; &#x27;number&#x27;) {const errorMsg &#x3D; &#x60;I expected to find a number but instead I found ${JSON.stringify(value)}&#x60;;return err(errorMsg);}return ok(value);})</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/kofno/jsonous/blob/5451c2a/src/Decoder.ts#L148">Decoder.ts:148</a></li>
+						<li>Defined in <a href="https://github.com/kofno/jsonous/blob/4a117f8/src/Decoder.ts#L161">Decoder.ts:161</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -1090,7 +1090,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">string<span class="tsd-signature-symbol">:</span> <a href="../classes/_decoder_.decoder.html" class="tsd-signature-type">Decoder</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;new Decoder&lt;string&gt;(value &#x3D;&gt; {if (typeof value !&#x3D;&#x3D; &#x27;string&#x27;) {const stringified &#x3D; JSON.stringify(value);const errorMsg &#x3D; &#x60;I expected to find a string but instead I found ${stringified}&#x60;;return err(errorMsg);}return ok(value);})</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/kofno/jsonous/blob/5451c2a/src/Decoder.ts#L134">Decoder.ts:134</a></li>
+						<li>Defined in <a href="https://github.com/kofno/jsonous/blob/4a117f8/src/Decoder.ts#L147">Decoder.ts:147</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -1112,7 +1112,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/5451c2a/src/Decoder.ts#L188">Decoder.ts:188</a></li>
+								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/4a117f8/src/Decoder.ts#L201">Decoder.ts:201</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1146,7 +1146,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/5451c2a/src/Decoder.ts#L233">Decoder.ts:233</a></li>
+								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/4a117f8/src/Decoder.ts#L246">Decoder.ts:246</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1183,7 +1183,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/5451c2a/src/Decoder.ts#L128">Decoder.ts:128</a></li>
+								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/4a117f8/src/Decoder.ts#L141">Decoder.ts:141</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1212,7 +1212,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/5451c2a/src/Decoder.ts#L208">Decoder.ts:208</a></li>
+								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/4a117f8/src/Decoder.ts#L221">Decoder.ts:221</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1249,7 +1249,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/5451c2a/src/Decoder.ts#L255">Decoder.ts:255</a></li>
+								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/4a117f8/src/Decoder.ts#L268">Decoder.ts:268</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1284,7 +1284,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/5451c2a/src/Decoder.ts#L281">Decoder.ts:281</a></li>
+								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/4a117f8/src/Decoder.ts#L294">Decoder.ts:294</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1330,7 +1330,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/5451c2a/src/Decoder.ts#L293">Decoder.ts:293</a></li>
+								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/4a117f8/src/Decoder.ts#L306">Decoder.ts:306</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1365,7 +1365,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/5451c2a/src/Decoder.ts#L122">Decoder.ts:122</a></li>
+								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/4a117f8/src/Decoder.ts#L135">Decoder.ts:135</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">

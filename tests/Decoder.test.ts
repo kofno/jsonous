@@ -154,6 +154,20 @@ test('decoder binding', t => {
   t.end();
 });
 
+test('Decoder.do', t => {
+  string
+    .do(v => t.pass(`Should run side-effect: ${v}`))
+    .decodeAny('foo')
+    .cata({ Err: m => t.fail(`should succeed: ${m}`), Ok: v => t.equal('foo', v) });
+
+  string.do(v => t.fail(`Should not run side-effect: ${v}`)).decodeAny(42).cata({
+    Err: m => t.pass(`should have failed: ${m}`),
+    Ok: v => t.fail(`Should not have passed: ${v}`),
+  });
+
+  t.end();
+});
+
 test('complex binding', t => {
   field('foo', string)
     .andThen(a => field('bar', number).andThen(b => succeed({ s: a, n: b })))
