@@ -610,10 +610,6 @@ es-to-primitive@^1.1.1:
     is-date-object "^1.0.1"
     is-symbol "^1.0.1"
 
-es6-structs@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/es6-structs/-/es6-structs-1.1.0.tgz#aa7caaf02e073f6c2547e2eb24991a4587628d38"
-
 escape-string-regexp@^1.0.2, escape-string-regexp@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz#1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
@@ -2256,6 +2252,10 @@ walk@^2.3.9:
   resolved "https://registry.yarnpkg.com/walk/-/walk-2.3.9.tgz#31b4db6678f2ae01c39ea9fb8725a9031e558a7b"
   dependencies:
     foreachasync "^3.0.0"
+
+weakset@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/weakset/-/weakset-1.0.0.tgz#7d525ebb93b24d38e6d0a19b0f3e14f099a3b270"
 
 wide-align@^1.1.0:
   version "1.1.2"

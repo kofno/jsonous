@@ -1,4 +1,4 @@
-import 'es6-structs';
+import 'weakset';
 
 /*
  * Based on this code: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Errors/Cyclic_object_value
