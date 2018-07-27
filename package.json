@@ -27,6 +27,7 @@
     "typescript": "^2.6.2"
   },
   "dependencies": {
+    "es6-structs": "^1.1.0",
     "maybeasy": "^2.0.1",
     "resulty": "^2.0.1"
   },
