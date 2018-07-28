@@ -139,7 +139,7 @@ export const succeed = <A>(value: A) => new Decoder(_ => ok(value));
  * Returns a decoder that always fails, returning an Err with the message
  * passed in.
  */
-export const fail = (message: string): Decoder<any> => new Decoder(_ => err(message));
+export const fail = <A>(message: string): Decoder<A> => new Decoder(_ => err(message));
 
 /**
  * String decoder
