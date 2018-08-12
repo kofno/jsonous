@@ -1283,8 +1283,8 @@ marked@^0.3.17:
   resolved "https://registry.yarnpkg.com/marked/-/marked-0.3.19.tgz#5d47f709c4c9fc3c216b6d46127280f40b39d790"
 
 maybeasy@^2.0.1:
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/maybeasy/-/maybeasy-2.3.2.tgz#41f25bd585a72828b5eb3d332faaaa87ce8a1b5c"
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/maybeasy/-/maybeasy-2.5.0.tgz#633ed6abf4ece0b276981357c039376d633a8d83"
 
 meow@^3.3.0:
   version "3.7.0"
