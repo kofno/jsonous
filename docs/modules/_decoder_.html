@@ -933,11 +933,17 @@ img { max-width: 100%; }
 		<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
 			<a href="_decoder_.html#at" class="tsd-kind-icon">at</a>
 		</li>
-		<li class=" tsd-kind-function tsd-parent-kind-external-module">
+		<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
+			<a href="_decoder_.html#dict" class="tsd-kind-icon">dict</a>
+		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
 			<a href="_decoder_.html#fail" class="tsd-kind-icon">fail</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
 			<a href="_decoder_.html#field" class="tsd-kind-icon">field</a>
+		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
+			<a href="_decoder_.html#keyvaluepairs" class="tsd-kind-icon">key<wbr>Value<wbr>Pairs</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
 			<a href="_decoder_.html#maybe" class="tsd-kind-icon">maybe</a>
@@ -985,8 +991,10 @@ img { max-width: 100%; }
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter"><a href="_decoder_.html#array" class="tsd-kind-icon">array</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter"><a href="_decoder_.html#at" class="tsd-kind-icon">at</a></li>
-							<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_decoder_.html#fail" class="tsd-kind-icon">fail</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter"><a href="_decoder_.html#dict" class="tsd-kind-icon">dict</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter"><a href="_decoder_.html#fail" class="tsd-kind-icon">fail</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter"><a href="_decoder_.html#field" class="tsd-kind-icon">field</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter"><a href="_decoder_.html#keyvaluepairs" class="tsd-kind-icon">key<wbr>Value<wbr>Pairs</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter"><a href="_decoder_.html#maybe" class="tsd-kind-icon">maybe</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter"><a href="_decoder_.html#nullable" class="tsd-kind-icon">nullable</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter"><a href="_decoder_.html#oneof" class="tsd-kind-icon">one<wbr>Of</a></li>
@@ -1004,7 +1012,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">Decoder<wbr>Fn<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/kofno/jsonous/blob/4a117f8/src/Decoder.ts#L7">Decoder.ts:7</a></li>
+						<li>Defined in <a href="https://github.com/kofno/jsonous/blob/72ab0fb/src/Decoder.ts#L8">Decoder.ts:8</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -1040,10 +1048,10 @@ img { max-width: 100%; }
 			<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
 				<a name="boolean" class="tsd-anchor"></a>
 				<h3><span class="tsd-flag ts-flagConst">Const</span> boolean</h3>
-				<div class="tsd-signature tsd-kind-icon">boolean<span class="tsd-signature-symbol">:</span> <a href="../classes/_decoder_.decoder.html" class="tsd-signature-type">Decoder</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;new Decoder&lt;boolean&gt;(value &#x3D;&gt; {if (typeof value !&#x3D;&#x3D; &#x27;boolean&#x27;) {const errorMsg &#x3D; &#x60;I expected to find a boolean but instead found ${JSON.stringify(value)}&#x60;;return err(errorMsg);}return ok(value);})</span></div>
+				<div class="tsd-signature tsd-kind-icon">boolean<span class="tsd-signature-symbol">:</span> <a href="../classes/_decoder_.decoder.html" class="tsd-signature-type">Decoder</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;new Decoder&lt;boolean&gt;(value &#x3D;&gt; {if (typeof value !&#x3D;&#x3D; &#x27;boolean&#x27;) {const errorMsg &#x3D; &#x60;I expected to find a boolean but instead found ${stringify(value)}&#x60;;return err(errorMsg);}return ok(value);})</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/kofno/jsonous/blob/4a117f8/src/Decoder.ts#L174">Decoder.ts:174</a></li>
+						<li>Defined in <a href="https://github.com/kofno/jsonous/blob/72ab0fb/src/Decoder.ts#L178">Decoder.ts:178</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -1055,10 +1063,10 @@ img { max-width: 100%; }
 			<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
 				<a name="date" class="tsd-anchor"></a>
 				<h3><span class="tsd-flag ts-flagConst">Const</span> date</h3>
-				<div class="tsd-signature tsd-kind-icon">date<span class="tsd-signature-symbol">:</span> <a href="../classes/_decoder_.decoder.html" class="tsd-signature-type">Decoder</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Date</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;new Decoder&lt;Date&gt;(value &#x3D;&gt; {const errMsg &#x3D; (v: any): string &#x3D;&gt; &#x60;I expected a date but instead I found ${JSON.stringify(v)}&#x60;;return ok(value).andThen(s &#x3D;&gt; string.map(v &#x3D;&gt; new Date(v)).decodeAny(s)).orElse(n &#x3D;&gt; number.map(v &#x3D;&gt; new Date(v)).decodeAny(n)).andThen(d &#x3D;&gt; (isNaN(d.getTime()) ? err&lt;any, Date&gt;(value) : ok(d))).mapError(() &#x3D;&gt; errMsg(value));})</span></div>
+				<div class="tsd-signature tsd-kind-icon">date<span class="tsd-signature-symbol">:</span> <a href="../classes/_decoder_.decoder.html" class="tsd-signature-type">Decoder</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Date</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;new Decoder&lt;Date&gt;(value &#x3D;&gt; {const errMsg &#x3D; (v: any): string &#x3D;&gt;&#x60;I expected a date but instead I found ${stringify(v)}&#x60;;return ok(value).andThen(s &#x3D;&gt; string.map(v &#x3D;&gt; new Date(v)).decodeAny(s)).orElse(n &#x3D;&gt; number.map(v &#x3D;&gt; new Date(v)).decodeAny(n)).andThen(d &#x3D;&gt; (isNaN(d.getTime()) ? err&lt;any, Date&gt;(value) : ok(d))).mapError(() &#x3D;&gt; errMsg(value));})</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/kofno/jsonous/blob/4a117f8/src/Decoder.ts#L189">Decoder.ts:189</a></li>
+						<li>Defined in <a href="https://github.com/kofno/jsonous/blob/72ab0fb/src/Decoder.ts#L195">Decoder.ts:195</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -1072,10 +1080,10 @@ img { max-width: 100%; }
 			<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
 				<a name="number" class="tsd-anchor"></a>
 				<h3><span class="tsd-flag ts-flagConst">Const</span> number</h3>
-				<div class="tsd-signature tsd-kind-icon">number<span class="tsd-signature-symbol">:</span> <a href="../classes/_decoder_.decoder.html" class="tsd-signature-type">Decoder</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;new Decoder&lt;number&gt;(value &#x3D;&gt; {if (typeof value !&#x3D;&#x3D; &#x27;number&#x27;) {const errorMsg &#x3D; &#x60;I expected to find a number but instead I found ${JSON.stringify(value)}&#x60;;return err(errorMsg);}return ok(value);})</span></div>
+				<div class="tsd-signature tsd-kind-icon">number<span class="tsd-signature-symbol">:</span> <a href="../classes/_decoder_.decoder.html" class="tsd-signature-type">Decoder</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;new Decoder&lt;number&gt;(value &#x3D;&gt; {if (typeof value !&#x3D;&#x3D; &#x27;number&#x27;) {const errorMsg &#x3D; &#x60;I expected to find a number but instead I found ${stringify(value)}&#x60;;return err(errorMsg);}return ok(value);})</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/kofno/jsonous/blob/4a117f8/src/Decoder.ts#L161">Decoder.ts:161</a></li>
+						<li>Defined in <a href="https://github.com/kofno/jsonous/blob/72ab0fb/src/Decoder.ts#L163">Decoder.ts:163</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -1087,10 +1095,10 @@ img { max-width: 100%; }
 			<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
 				<a name="string" class="tsd-anchor"></a>
 				<h3><span class="tsd-flag ts-flagConst">Const</span> string</h3>
-				<div class="tsd-signature tsd-kind-icon">string<span class="tsd-signature-symbol">:</span> <a href="../classes/_decoder_.decoder.html" class="tsd-signature-type">Decoder</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;new Decoder&lt;string&gt;(value &#x3D;&gt; {if (typeof value !&#x3D;&#x3D; &#x27;string&#x27;) {const stringified &#x3D; JSON.stringify(value);const errorMsg &#x3D; &#x60;I expected to find a string but instead I found ${stringified}&#x60;;return err(errorMsg);}return ok(value);})</span></div>
+				<div class="tsd-signature tsd-kind-icon">string<span class="tsd-signature-symbol">:</span> <a href="../classes/_decoder_.decoder.html" class="tsd-signature-type">Decoder</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;new Decoder&lt;string&gt;(value &#x3D;&gt; {if (typeof value !&#x3D;&#x3D; &#x27;string&#x27;) {const stringified &#x3D; stringify(value);const errorMsg &#x3D; &#x60;I expected to find a string but instead I found ${stringified}&#x60;;return err(errorMsg);}return ok(value);})</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/kofno/jsonous/blob/4a117f8/src/Decoder.ts#L147">Decoder.ts:147</a></li>
+						<li>Defined in <a href="https://github.com/kofno/jsonous/blob/72ab0fb/src/Decoder.ts#L149">Decoder.ts:149</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -1112,7 +1120,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/4a117f8/src/Decoder.ts#L201">Decoder.ts:201</a></li>
+								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/72ab0fb/src/Decoder.ts#L208">Decoder.ts:208</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1146,7 +1154,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/4a117f8/src/Decoder.ts#L246">Decoder.ts:246</a></li>
+								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/72ab0fb/src/Decoder.ts#L258">Decoder.ts:258</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1173,17 +1181,59 @@ img { max-width: 100%; }
 					</li>
 				</ul>
 			</section>
-			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
-				<a name="fail" class="tsd-anchor"></a>
-				<h3><span class="tsd-flag ts-flagConst">Const</span> fail</h3>
-				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
-					<li class="tsd-signature tsd-kind-icon">fail<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_decoder_.decoder.html" class="tsd-signature-type">Decoder</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
+				<a name="dict" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagConst">Const</span> dict</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
+					<li class="tsd-signature tsd-kind-icon">dict&lt;A&gt;<span class="tsd-signature-symbol">(</span>decoder<span class="tsd-signature-symbol">: </span><a href="../classes/_decoder_.decoder.html" class="tsd-signature-type">Decoder</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_decoder_.decoder.html" class="tsd-signature-type">Decoder</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/4a117f8/src/Decoder.ts#L141">Decoder.ts:141</a></li>
+								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/72ab0fb/src/Decoder.ts#L372">Decoder.ts:372</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Converts a JSON object to a Map&lt;string, A&gt;.</p>
+							</div>
+							<p>I would reccomend using this as a decoder of last resort. For correctness, you are
+								probably better off using field decoders and explicitly declaring the shape of the
+							objects you are expecting.</p>
+						</div>
+						<h4 class="tsd-type-parameters-title">Type parameters</h4>
+						<ul class="tsd-type-parameters">
+							<li>
+								<h4>A</h4>
+							</li>
+						</ul>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>decoder: <a href="../classes/_decoder_.decoder.html" class="tsd-signature-type">Decoder</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<div class="lead">
+										<p>The internal decoder to be applied to the object values</p>
+									</div>
+								</div>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <a href="../classes/_decoder_.decoder.html" class="tsd-signature-type">Decoder</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
+				<a name="fail" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagConst">Const</span> fail</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
+					<li class="tsd-signature tsd-kind-icon">fail&lt;A&gt;<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_decoder_.decoder.html" class="tsd-signature-type">Decoder</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/72ab0fb/src/Decoder.ts#L142">Decoder.ts:142</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1192,13 +1242,19 @@ img { max-width: 100%; }
 								passed in.</p>
 							</div>
 						</div>
+						<h4 class="tsd-type-parameters-title">Type parameters</h4>
+						<ul class="tsd-type-parameters">
+							<li>
+								<h4>A</h4>
+							</li>
+						</ul>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
 								<h5>message: <span class="tsd-signature-type">string</span></h5>
 							</li>
 						</ul>
-						<h4 class="tsd-returns-title">Returns <a href="../classes/_decoder_.decoder.html" class="tsd-signature-type">Decoder</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						<h4 class="tsd-returns-title">Returns <a href="../classes/_decoder_.decoder.html" class="tsd-signature-type">Decoder</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span></h4>
 					</li>
 				</ul>
 			</section>
@@ -1212,7 +1268,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/4a117f8/src/Decoder.ts#L221">Decoder.ts:221</a></li>
+								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/72ab0fb/src/Decoder.ts#L230">Decoder.ts:230</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1240,6 +1296,47 @@ img { max-width: 100%; }
 				</ul>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
+				<a name="keyvaluepairs" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagConst">Const</span> key<wbr>Value<wbr>Pairs</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
+					<li class="tsd-signature tsd-kind-icon">key<wbr>Value<wbr>Pairs&lt;A&gt;<span class="tsd-signature-symbol">(</span>decoder<span class="tsd-signature-symbol">: </span><a href="../classes/_decoder_.decoder.html" class="tsd-signature-type">Decoder</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_decoder_.decoder.html" class="tsd-signature-type">Decoder</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/72ab0fb/src/Decoder.ts#L343">Decoder.ts:343</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Converts a JSON object to an array of key value pairs ((string, A)[]). The
+									passed in decoder is applied to the object value. The key will always be
+								converted to a string.</p>
+							</div>
+						</div>
+						<h4 class="tsd-type-parameters-title">Type parameters</h4>
+						<ul class="tsd-type-parameters">
+							<li>
+								<h4>A</h4>
+							</li>
+						</ul>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>decoder: <a href="../classes/_decoder_.decoder.html" class="tsd-signature-type">Decoder</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<div class="lead">
+										<p>The internal decoder to be applied to the object values</p>
+									</div>
+								</div>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <a href="../classes/_decoder_.decoder.html" class="tsd-signature-type">Decoder</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
 				<a name="maybe" class="tsd-anchor"></a>
 				<h3><span class="tsd-flag ts-flagConst">Const</span> maybe</h3>
 				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
@@ -1249,7 +1346,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/4a117f8/src/Decoder.ts#L268">Decoder.ts:268</a></li>
+								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/72ab0fb/src/Decoder.ts#L283">Decoder.ts:283</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1284,7 +1381,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/4a117f8/src/Decoder.ts#L294">Decoder.ts:294</a></li>
+								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/72ab0fb/src/Decoder.ts#L309">Decoder.ts:309</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1330,7 +1427,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/4a117f8/src/Decoder.ts#L306">Decoder.ts:306</a></li>
+								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/72ab0fb/src/Decoder.ts#L321">Decoder.ts:321</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1365,7 +1462,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/4a117f8/src/Decoder.ts#L135">Decoder.ts:135</a></li>
+								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/72ab0fb/src/Decoder.ts#L136">Decoder.ts:136</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">

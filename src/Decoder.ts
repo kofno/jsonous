@@ -48,7 +48,7 @@ export default class Decoder<A> {
    */
   public assign<K extends string, B>(
     k: K,
-    other: Decoder<B> | ((a: A) => Decoder<B>),
+    other: Decoder<B> | ((a: A) => Decoder<B>)
   ): Decoder<A & { [k in K]: B }> {
     return this.andThen(a => {
       const decoder = other instanceof Decoder ? other : other(a);
@@ -139,7 +139,8 @@ export const succeed = <A>(value: A) => new Decoder(_ => ok(value));
  * Returns a decoder that always fails, returning an Err with the message
  * passed in.
  */
-export const fail = <A>(message: string): Decoder<A> => new Decoder(_ => err(message));
+export const fail = <A>(message: string): Decoder<A> =>
+  new Decoder(_ => err(message));
 
 /**
  * String decoder
@@ -161,7 +162,9 @@ export const string: Decoder<string> = new Decoder<string>(value => {
 // tslint:disable-next-line:variable-name
 export const number: Decoder<number> = new Decoder<number>(value => {
   if (typeof value !== 'number') {
-    const errorMsg = `I expected to find a number but instead I found ${stringify(value)}`;
+    const errorMsg = `I expected to find a number but instead I found ${stringify(
+      value
+    )}`;
     return err(errorMsg);
   }
 
@@ -174,7 +177,9 @@ export const number: Decoder<number> = new Decoder<number>(value => {
 // tslint:disable-next-line:variable-name
 export const boolean: Decoder<boolean> = new Decoder<boolean>(value => {
   if (typeof value !== 'boolean') {
-    const errorMsg = `I expected to find a boolean but instead found ${stringify(value)}`;
+    const errorMsg = `I expected to find a boolean but instead found ${stringify(
+      value
+    )}`;
     return err(errorMsg);
   }
 
@@ -188,7 +193,8 @@ export const boolean: Decoder<boolean> = new Decoder<boolean>(value => {
  * to construct a JavaScript date object from the value.
  */
 export const date: Decoder<Date> = new Decoder<Date>(value => {
-  const errMsg = (v: any): string => `I expected a date but instead I found ${stringify(v)}`;
+  const errMsg = (v: any): string =>
+    `I expected a date but instead I found ${stringify(v)}`;
   return ok(value)
     .andThen(s => string.map(v => new Date(v)).decodeAny(s))
     .orElse(n => number.map(v => new Date(v)).decodeAny(n))
@@ -202,7 +208,9 @@ export const date: Decoder<Date> = new Decoder<Date>(value => {
 export const array = <A>(decoder: Decoder<A>): Decoder<A[]> =>
   new Decoder<A[]>(value => {
     if (!(value instanceof Array)) {
-      const errorMsg = `I expected an array but instead I found ${stringify(value)}`;
+      const errorMsg = `I expected an array but instead I found ${stringify(
+        value
+      )}`;
       return err(errorMsg) as Result<string, A[]>;
     }
 
@@ -211,7 +219,7 @@ export const array = <A>(decoder: Decoder<A>): Decoder<A[]> =>
       return memo.andThen(results => {
         return result
           .mapError(s => `I found an error in the array at [${idx}]: ${s}`)
-          .map(v => results.concat([ v ]));
+          .map(v => results.concat([v]));
       });
     }, ok([]));
   });
@@ -236,13 +244,21 @@ export const field = <A>(name: string, decoder: Decoder<A>): Decoder<A> =>
     const v = value[name];
     return decoder
       .decodeAny(v)
-      .mapError(e => `I found an error in the field named '${name}' of ${stringify(value)}: ${e}`);
+      .mapError(
+        e =>
+          `I found an error in the field named '${name}' of ${stringify(
+            value
+          )}: ${e}`
+      );
   });
 
 /**
  * Decodes the value at a particular path in a nested JavaScript object.
  */
-export const at = <A>(path: Array<number | string>, decoder: Decoder<A>): Decoder<A> =>
+export const at = <A>(
+  path: Array<number | string>,
+  decoder: Decoder<A>
+): Decoder<A> =>
   new Decoder<A>(value => {
     let val = value;
     let idx = 0;
@@ -252,7 +268,7 @@ export const at = <A>(path: Array<number | string>, decoder: Decoder<A>): Decode
         const pathStr = stringify(path.slice(0, idx + 1));
         const valueStr = stringify(value);
         return err(
-          `I found an error in the 'at' path. I could not find path '${pathStr}' in ${valueStr}`,
+          `I found an error in the 'at' path. I could not find path '${pathStr}' in ${valueStr}`
         );
       }
       idx += 1;
@@ -309,8 +325,54 @@ export const oneOf = <A>(decoders: Array<Decoder<A>>): Decoder<A> =>
     }
 
     const result = decoders.reduce((memo, decoder) => {
-      return memo.orElse(err1 => decoder.decodeAny(value).mapError(err2 => `${err1}\n${err2}`));
+      return memo.orElse(err1 =>
+        decoder.decodeAny(value).mapError(err2 => `${err1}\n${err2}`)
+      );
     }, err<string, A>(''));
 
     return result.mapError(m => `I found the following problems:\n${m}`);
   });
+
+/**
+ * Converts a JSON object to an array of key value pairs ((string, A)[]). The
+ * passed in decoder is applied to the object value. The key will always be
+ * converted to a string.
+ *
+ * @param decoder The internal decoder to be applied to the object values
+ */
+export const keyValuePairs = <A>(decoder: Decoder<A>): Decoder<[string, A][]> =>
+  new Decoder(value => {
+    if (typeof value !== 'object' || value === null || value instanceof Array) {
+      return err<string, [string, A][]>(
+        `Expected to find an object and instead found '${stringify(value)}'`
+      );
+    }
+
+    return Object.keys(value).reduce(
+      (memo, key) =>
+        memo.andThen(pairs =>
+          decoder
+            .decodeAny(value[key])
+            .mapError(err => `Key '${key}' failed to decode: ${err}`)
+            .map(v => pairs.concat([[key, v]]))
+        ),
+      ok([]) as Result<string, [string, A][]>
+    );
+  });
+
+/**
+ * Converts a JSON object to a Map<string, A>.
+ *
+ * I would reccomend using this as a decoder of last resort. For correctness, you are
+ * probably better off using field decoders and explicitly declaring the shape of the
+ * objects you are expecting.
+ *
+ * @param decoder The internal decoder to be applied to the object values
+ */
+export const dict = <A>(decoder: Decoder<A>): Decoder<Map<string, A>> =>
+  keyValuePairs(decoder).map(pairs =>
+    pairs.reduce((memo, [key, value]) => {
+      memo.set(key, value);
+      return memo;
+    }, new Map<string, A>())
+  );

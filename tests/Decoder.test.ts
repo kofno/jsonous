@@ -4,7 +4,9 @@ import {
   at,
   boolean,
   date,
+  dict,
   field,
+  keyValuePairs,
   maybe,
   nullable,
   number,
@@ -75,81 +77,108 @@ test('date decoder', t => {
 });
 
 test('array decoder', t => {
-  array(string).decodeJson('["foo", "bar", "baz"]').cata({
-    Err: m => t.fail(`array decoder should have passed: ${m}`),
-    Ok: v => t.pass(`array decoder passed: ${v}`),
-  });
+  array(string)
+    .decodeJson('["foo", "bar", "baz"]')
+    .cata({
+      Err: m => t.fail(`array decoder should have passed: ${m}`),
+      Ok: v => t.pass(`array decoder passed: ${v}`),
+    });
 
-  array(string).decodeJson('["foo", 42, "bar"]').cata({
-    Err: m => t.pass(`array decoder failed: ${m}`),
-    Ok: v => t.fail(`array decoder should have failed: ${v}`),
-  });
+  array(string)
+    .decodeJson('["foo", 42, "bar"]')
+    .cata({
+      Err: m => t.pass(`array decoder failed: ${m}`),
+      Ok: v => t.fail(`array decoder should have failed: ${v}`),
+    });
 
   t.end();
 });
 
 test('field decoder', t => {
-  field('foo', string).decodeJson('{ "foo": "bar" }').cata({
-    Err: m => t.fail(`field decoder should have passed: ${m}`),
-    Ok: v => t.pass(`field decoder worked. Returned: ${v}`),
-  });
+  field('foo', string)
+    .decodeJson('{ "foo": "bar" }')
+    .cata({
+      Err: m => t.fail(`field decoder should have passed: ${m}`),
+      Ok: v => t.pass(`field decoder worked. Returned: ${v}`),
+    });
 
-  field('foo', string).decodeJson('{ "bar": "baz" }').cata({
-    Err: m => t.pass(`field decoder failed: ${m}`),
-    Ok: v => t.fail(`field decoder should have failed: ${v}`),
-  });
+  field('foo', string)
+    .decodeJson('{ "bar": "baz" }')
+    .cata({
+      Err: m => t.pass(`field decoder failed: ${m}`),
+      Ok: v => t.fail(`field decoder should have failed: ${v}`),
+    });
 
-  field('foo', string).decodeJson('{ "foo": 42 }').cata({
-    Err: m => t.pass(`field decoder failed: ${m}`),
-    Ok: v => t.fail(`field decoder should have failed: ${v}`),
-  });
+  field('foo', string)
+    .decodeJson('{ "foo": 42 }')
+    .cata({
+      Err: m => t.pass(`field decoder failed: ${m}`),
+      Ok: v => t.fail(`field decoder should have failed: ${v}`),
+    });
 
-  field('foo', string).decodeAny(null).cata({
-    Err: m => t.pass(`field decoder failed: ${m}`),
-    Ok: v => t.fail(`field decoder should have failed: ${v}`),
-  });
+  field('foo', string)
+    .decodeAny(null)
+    .cata({
+      Err: m => t.pass(`field decoder failed: ${m}`),
+      Ok: v => t.fail(`field decoder should have failed: ${v}`),
+    });
 
   t.end();
 });
 
 test('at decoder', t => {
-  at([ 'foo', 0, 'bar' ], number).decodeAny({ foo: [ { bar: 42 } ] }).cata({
-    Err: m => t.fail(`Expected path to pass: ${m}`),
-    Ok: v => t.pass(`at decoder worked. Returned: ${v}`),
-  });
+  at(['foo', 0, 'bar'], number)
+    .decodeAny({ foo: [{ bar: 42 }] })
+    .cata({
+      Err: m => t.fail(`Expected path to pass: ${m}`),
+      Ok: v => t.pass(`at decoder worked. Returned: ${v}`),
+    });
 
-  at([ 'foo', 1, 'bar' ], number).decodeAny({ foo: [ { bar: 42 } ] }).cata({
-    Err: m => t.pass(`at failed with: ${m}`),
-    Ok: v => t.fail(`at should have failed: ${v}`),
-  });
+  at(['foo', 1, 'bar'], number)
+    .decodeAny({ foo: [{ bar: 42 }] })
+    .cata({
+      Err: m => t.pass(`at failed with: ${m}`),
+      Ok: v => t.fail(`at should have failed: ${v}`),
+    });
 
-  at([ 'foo', 0, 'bar' ], nullable(number)).decodeAny({ foo: [ { bar: null } ] }).cata({
-    Err: m => t.fail('at should be compatible with nullable'),
-    Ok: v => t.pass(`at is compatible with nullable`),
-  });
+  at(['foo', 0, 'bar'], nullable(number))
+    .decodeAny({ foo: [{ bar: null }] })
+    .cata({
+      Err: m => t.fail('at should be compatible with nullable'),
+      Ok: v => t.pass(`at is compatible with nullable`),
+    });
 
   t.end();
 });
 
 test('decoder mapping', t => {
-  string.map(s => s.toUpperCase()).decodeJson('"foo"').cata({
-    Err: m => t.fail(`mapping a decoder should pass: ${m}`),
-    Ok: v => t.pass(`mapping a decoder passed: ${v}`),
-  });
+  string
+    .map(s => s.toUpperCase())
+    .decodeJson('"foo"')
+    .cata({
+      Err: m => t.fail(`mapping a decoder should pass: ${m}`),
+      Ok: v => t.pass(`mapping a decoder passed: ${v}`),
+    });
 
-  string.map(s => s.toUpperCase()).decodeJson('42').cata({
-    Err: m => t.pass(`mapping failed decoders returns errors: ${m}`),
-    Ok: v => t.pass(`mapping failed decoders should fail: ${v}`),
-  });
+  string
+    .map(s => s.toUpperCase())
+    .decodeJson('42')
+    .cata({
+      Err: m => t.pass(`mapping failed decoders returns errors: ${m}`),
+      Ok: v => t.pass(`mapping failed decoders should fail: ${v}`),
+    });
 
   t.end();
 });
 
 test('decoder binding', t => {
-  field('foo', string).andThen(a => succeed({ baz: a })).decodeJson('{"foo":"bar"}').cata({
-    Err: m => t.fail(`andThen should have passed: ${m}`),
-    Ok: v => t.pass(`andThen passed with value: ${JSON.stringify(v)}`),
-  });
+  field('foo', string)
+    .andThen(a => succeed({ baz: a }))
+    .decodeJson('{"foo":"bar"}')
+    .cata({
+      Err: m => t.fail(`andThen should have passed: ${m}`),
+      Ok: v => t.pass(`andThen passed with value: ${JSON.stringify(v)}`),
+    });
 
   t.end();
 });
@@ -158,12 +187,18 @@ test('Decoder.do', t => {
   string
     .do(v => t.pass(`Should run side-effect: ${v}`))
     .decodeAny('foo')
-    .cata({ Err: m => t.fail(`should succeed: ${m}`), Ok: v => t.equal('foo', v) });
+    .cata({
+      Err: m => t.fail(`should succeed: ${m}`),
+      Ok: v => t.equal('foo', v),
+    });
 
-  string.do(v => t.fail(`Should not run side-effect: ${v}`)).decodeAny(42).cata({
-    Err: m => t.pass(`should have failed: ${m}`),
-    Ok: v => t.fail(`Should not have passed: ${v}`),
-  });
+  string
+    .do(v => t.fail(`Should not run side-effect: ${v}`))
+    .decodeAny(42)
+    .cata({
+      Err: m => t.pass(`should have failed: ${m}`),
+      Ok: v => t.fail(`Should not have passed: ${v}`),
+    });
 
   t.end();
 });
@@ -213,7 +248,10 @@ test('assign chaining', t => {
 });
 
 test('alternative', t => {
-  const decoder = field('foo', string.orElse(_ => number.map(n => n.toString())));
+  const decoder = field(
+    'foo',
+    string.orElse(_ => number.map(n => n.toString()))
+  );
   decoder.decodeAny({ foo: 'hi' }).cata({
     Err: m => t.fail(`string alternative should have passed: ${m}`),
     Ok: v => t.pass(`string alternative passed: ${v}`),
@@ -230,24 +268,32 @@ test('alternative', t => {
 });
 
 test('optional primitive', t => {
-  maybe(string).decodeJson('"foo"').cata({
-    Err: m => t.fail(`optional decoders should always pass: ${m}`),
-    Ok: mv => t.equal('foo', mv.getOrElseValue('oops!'), `optional value passed`),
-  });
+  maybe(string)
+    .decodeJson('"foo"')
+    .cata({
+      Err: m => t.fail(`optional decoders should always pass: ${m}`),
+      Ok: mv =>
+        t.equal('foo', mv.getOrElseValue('oops!'), `optional value passed`),
+    });
 
-  maybe(string).decodeJson('42').cata({
-    Err: m => t.fail(`optional decoders should always pass: ${m}`),
-    Ok: mv => t.equal('oops!', mv.getOrElseValue('oops!'), 'optional fail passed'),
-  });
+  maybe(string)
+    .decodeJson('42')
+    .cata({
+      Err: m => t.fail(`optional decoders should always pass: ${m}`),
+      Ok: mv =>
+        t.equal('oops!', mv.getOrElseValue('oops!'), 'optional fail passed'),
+    });
 
-  maybe(date).decodeJson('null').cata({
-    Err: m => t.fail(`maybe should never fail: ${m}`),
-    Ok: v =>
-      v.cata({
-        Nothing: () => t.pass('should not be a date'),
-        Just: v1 => t.fail(`shouldn't have a date: ${v1}`),
-      }),
-  });
+  maybe(date)
+    .decodeJson('null')
+    .cata({
+      Err: m => t.fail(`maybe should never fail: ${m}`),
+      Ok: v =>
+        v.cata({
+          Nothing: () => t.pass('should not be a date'),
+          Just: v1 => t.fail(`shouldn't have a date: ${v1}`),
+        }),
+    });
 
   t.end();
 });
@@ -291,7 +337,8 @@ test('nullable', t => {
 
   decoder.decodeAny('foo').cata({
     Err: m => t.fail(`nullable string should've passed: ${m}`),
-    Ok: v => v.cata({ Nothing: () => t.fail('unexpected nothing'), Just: t.pass }),
+    Ok: v =>
+      v.cata({ Nothing: () => t.fail('unexpected nothing'), Just: t.pass }),
   });
 
   decoder.decodeAny(null).cata({
@@ -301,7 +348,8 @@ test('nullable', t => {
 
   decoder.decodeAny(42).cata({
     Err: t.pass,
-    Ok: v => t.fail(`nullable shouldn't mask decoder fails: ${JSON.stringify(v)}`),
+    Ok: v =>
+      t.fail(`nullable shouldn't mask decoder fails: ${JSON.stringify(v)}`),
   });
 
   t.end();
@@ -309,7 +357,7 @@ test('nullable', t => {
 
 test('oneOf', t => {
   const numberToString = number.map(n => n.toString());
-  const decoder = oneOf([ string, numberToString ]);
+  const decoder = oneOf([string, numberToString]);
 
   decoder.decodeAny(undefined).cata({
     Err: m => t.pass(`oneOf didn't match anything: ${m}`),
@@ -328,11 +376,48 @@ test('oneOf', t => {
 
 test('applicative', t => {
   const ctor = (s: string) => (n: number) => ({ s, n });
-  const decoder = succeed(ctor).ap(field('foo', string)).ap(field('bar', number));
+  const decoder = succeed(ctor)
+    .ap(field('foo', string))
+    .ap(field('bar', number));
 
   decoder.decodeAny({ foo: 'baz', bar: 42 }).cata({
     Err: m => t.fail(`should have succeeded: ${m}`),
     Ok: v => t.pass(`Worked!: ${JSON.stringify(v)}`),
   });
+  t.end();
+});
+
+test('keyValuePairs', t => {
+  const decoder = keyValuePairs(number);
+
+  decoder.decodeAny(undefined).cata({
+    Err: m => t.pass(`keyValues needs an object: ${m}`),
+    Ok: v => t.fail(`should have failed: ${v}`),
+  });
+
+  decoder.decodeAny({ foo: 42, bar: 'two' }).cata({
+    Err: m => t.pass(`internal keyValue decoder failed: ${m}`),
+    Ok: v => t.pass(`should have failed: ${v}`),
+  });
+
+  decoder.decodeAny({ foo: 42, bar: 2 }).cata({
+    Err: m => t.fail(`should have passed: ${m}`),
+    Ok: v => t.deepEqual(v, [['foo', 42], ['bar', 2]]),
+  });
+
+  t.end();
+});
+
+test('dict', t => {
+  const decoder = dict(number);
+
+  decoder.decodeAny({ foo: 42, bar: 2 }).cata({
+    Err: err => t.fail(`should have passed: ${err}`),
+    Ok: v => {
+      t.equal(42, v.get('foo'));
+      t.equal(2, v.get('bar'));
+    },
+  });
+
   t.end();
 });

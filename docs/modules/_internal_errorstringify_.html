@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>jsonous | jsonous</title>
+	<title>&quot;Internal/ErrorStringify&quot; | jsonous</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<style type="text/css">/*! normalize.css v1.1.3 | MIT License | git.io/normalize */
@@ -879,7 +879,7 @@ img { max-width: 100%; }
 		<div class="container">
 			<div class="table-wrap">
 				<div class="table-cell">
-					<strong><a href="index.html">jsonous</a></strong>
+					<strong><a href="../index.html">jsonous</a></strong>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -909,125 +909,71 @@ img { max-width: 100%; }
 </header>
 <nav class="tsd-navigation secondary">
 	<ul>
+		<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+			<a href="_internal_errorstringify_.html#cyclicalreferencereplacer" class="tsd-kind-icon">cyclical<wbr>Reference<wbr>Replacer</a>
+		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-external-module">
+			<a href="_internal_errorstringify_.html#stringify" class="tsd-kind-icon">stringify</a>
+		</li>
 	</ul>
 </nav>
 <div class="container container-main">
 	<div class="content-wrap">
-		<div class="tsd-panel tsd-typography">
-			<h1 id="jsonous">jsonous</h1>
-			<p><a href="https://travis-ci.org/kofno/jsonous"><img src="https://travis-ci.org/kofno/jsonous.svg?branch=master" alt="Build Status"></a>
-			<a href="https://github.com/semantic-release/semantic-release"><img src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg" alt="semantic-release"></a></p>
-			<p>If you&#39;re building a web application, you&#39;re eventually going to need a reliable
-				way to convert JSON into type that you can use. <code>JSON.parse</code> will only get you
-			so far.</p>
-			<p>A better solution allows you to verify the structure of the source data while
-				converting it into the types you need to work with. It handles variations in
-				content structure. In a typed environment, it preserves your types so you don&#39;t
-				have to pass <code>any</code> types around. Errors are handled gracefully using a Result
-			type.</p>
-			<p>This library, heavily inspired by Elm&#39;s <a href="http://package.elm-lang.org/packages/elm-lang/core/latest/Json-Decode">JSON Decoder</a>, is just
-			such a solution.</p>
-			<h1 id="install">install</h1>
-			<blockquote>
-				<p>npm install --save jsonous</p>
-			</blockquote>
-			<blockquote>
-				<p>yarn add jsonous</p>
-			</blockquote>
-			<h1 id="usage">usage</h1>
-			<h2 id="primitives">primitives</h2>
-			<p>There are several decoders for handling JSON primitives; strings, numbers,
-			booleans, and arrays (more on objects later)</p>
-			<pre><code class="lang-typescript"><span class="hljs-built_in">string</span>.decodeJson(<span class="hljs-string">'"foo"'</span>); <span class="hljs-comment">// --&gt; Ok("foo")</span>
-<span class="hljs-built_in">string</span>.decodeJson(<span class="hljs-string">'42'</span>); <span class="hljs-comment">// --&gt; Err("42 is not a string")</span>
-
-<span class="hljs-built_in">number</span>.decodeJson(<span class="hljs-string">'42'</span>); <span class="hljs-comment">// --&gt; Ok(42)</span>
-<span class="hljs-built_in">number</span>.decodeJson(<span class="hljs-string">'"foo"'</span>); <span class="hljs-comment">// --&gt; Err("foo is not a number")</span>
-
-<span class="hljs-built_in">boolean</span>.decodeJson(<span class="hljs-string">'true'</span>); <span class="hljs-comment">// --&gt; Ok(true)</span>
-<span class="hljs-built_in">boolean</span>.decodeJson(<span class="hljs-string">'"foo"'</span>); <span class="hljs-comment">// --&gt; Err("foo is not a boolean")</span>
-</code></pre>
-			<h2 id="arrays">arrays</h2>
-			<p>The array primitive applies another decoder to an array of values.</p>
-			<pre><code class="lang-typescript">array(<span class="hljs-built_in">string</span>).decodeJson(<span class="hljs-string">'["foo", "bar"]'</span>); <span class="hljs-comment">// --&gt; Ok(["foo", "bar"])</span>
-array(<span class="hljs-built_in">string</span>).decodeJson(<span class="hljs-string">'["foo", 42]'</span>); <span class="hljs-comment">// --&gt; Err("42 is not a string")</span>
-</code></pre>
-			<h2 id="objects">objects</h2>
-			<p>The <code>field</code> and <code>at</code> decoders are used to extract values from objects.</p>
-			<pre><code class="lang-typescript">field(<span class="hljs-string">'bar'</span>, <span class="hljs-built_in">string</span>).decodeAny({ bar: <span class="hljs-string">'baz'</span> }); <span class="hljs-comment">// --&gt; Ok('baz')</span>
-at([<span class="hljs-string">'foo'</span>, <span class="hljs-number">0</span>, <span class="hljs-string">'bar'</span>], <span class="hljs-built_in">number</span>).decodeAny({ foo: [{ bar: <span class="hljs-number">42</span> }] }); <span class="hljs-comment">// --&gt; Ok(42)</span>
-</code></pre>
-			<p>Object decoders can be chained together to build more complex data structures.</p>
-			<pre><code class="lang-typescript"><span class="hljs-comment">// prettier-ignore</span>
-field(<span class="hljs-string">'userId'</span>, <span class="hljs-built_in">number</span>).andThen(<span class="hljs-function"><span class="hljs-params">id</span> =&gt;</span>
-field(<span class="hljs-string">'emailAddress'</span>, <span class="hljs-built_in">string</span>).andThen(<span class="hljs-function"><span class="hljs-params">email</span> =&gt;</span>
-succeed({ id, email })))
-.decodeAny({ userId: <span class="hljs-number">213</span>, emailAddress: <span class="hljs-string">'foo@example.com'</span> })
-<span class="hljs-comment">// --&gt; Ok({ id: 213, email: 'foo@example.com'})</span>
-</code></pre>
-			<p>Of course, your code editor may try to reformat this code.</p>
-			<pre><code class="lang-typescript">field(<span class="hljs-string">'userId'</span>, <span class="hljs-built_in">number</span>)
-  .andThen(<span class="hljs-function"><span class="hljs-params">id</span> =&gt;</span>
-    field(<span class="hljs-string">'emailAddress'</span>, <span class="hljs-built_in">string</span>).andThen(<span class="hljs-function"><span class="hljs-params">email</span> =&gt;</span> succeed({ id, email }))
-  )
-  .decodeAny({ userId: <span class="hljs-number">213</span>, emailAddress: <span class="hljs-string">'foo@example.com'</span> });
-<span class="hljs-comment">// --&gt; Ok({ id: 213, email: 'foo@example.com'})</span>
-</code></pre>
-			<p>For an object of any moderate complexity, this nesting is indistinguishable from
-			callback hell.</p>
-			<p>To combat this, decoders have a method named <code>assign</code>. It enacapsulates this
-				pattern of building objects such that objects can be built incrementally, without
-			nesting and without losing type safety.</p>
-			<p>The previous example would look like this using <code>assign</code>:</p>
-			<pre><code class="lang-typescript">succeed({})
-  .assign(<span class="hljs-string">'id'</span>, field(<span class="hljs-string">'userId'</span>, <span class="hljs-built_in">number</span>))
-  .assign(<span class="hljs-string">'email'</span>, field(<span class="hljs-string">'emailAddress'</span>, <span class="hljs-built_in">string</span>))
-  .decodeAny({ userId: <span class="hljs-number">213</span>, emailAddress: <span class="hljs-string">'foo@example.com'</span> });
-<span class="hljs-comment">// --&gt; Ok({ id: 213, email: 'foo@example.com' })</span>
-</code></pre>
-			<p>Objects can also be built using the applicative style.</p>
-			<pre><code class="lang-typescript"><span class="hljs-keyword">const</span> ctor = <span class="hljs-function">(<span class="hljs-params">id: <span class="hljs-built_in">number</span></span>) =&gt;</span> (email: <span class="hljs-built_in">string</span>) =&gt; ({ id, email });
-<span class="hljs-keyword">const</span> decoder = succeed(ctor)
-  .ap(field(<span class="hljs-string">'userId'</span>, <span class="hljs-built_in">number</span>))
-  .ap(field(<span class="hljs-string">'emailAddress'</span>, <span class="hljs-built_in">string</span>));
-
-decoder.decodeAny({ userId: <span class="hljs-number">213</span>, emailAddress: <span class="hljs-string">'foo@example.com'</span> });
-<span class="hljs-comment">// --&gt; Ok({ id: 213, email: 'foo@example.com'})</span>
-</code></pre>
-			<p>One stumbling block for this style is that your constructor function must be
-				curried. I&#39;ve manually curried this function, but you could also use a <code>curry</code>
-			function from an FP library like <a href="http://ramdajs.com/docs/#curry">Ramda</a></p>
-			<p>Applicative style requires that the object decoders are applied in the same
-				order as the function parameters are declared. Also, for a significantly
-				complex object, the constructor function will require a boatload of arguments.
-			That&#39;s never fun.</p>
-			<p>In any case, the best strategy for handling object construction with decoders
-			is to compose complex decoders from smaller, simpler decoders.</p>
-			<pre><code class="lang-typescript">succeed({})
-  .assign(<span class="hljs-string">'user'</span>, field(<span class="hljs-string">'user'</span>, userDecoder))
-  .assign(<span class="hljs-string">'courses'</span>, at([<span class="hljs-string">'student'</span>, <span class="hljs-string">'courses'</span>], array(courseDecoder)))
-  .decodeJson(<span class="hljs-string">'... some json ... '</span>)
-
-<span class="hljs-keyword">const</span> userDecoder = <span class="hljs-comment">//...</span>
-<span class="hljs-keyword">const</span> courseDecoder = <span class="hljs-comment">//...</span>
-</code></pre>
-			<h1 id="docs">docs</h1>
-			<p><a href="https://kofno.github.io/jsonous">API</a></p>
-		</div>
-		<div style="position:relative;"><a name="typedoc-main-index" class="tsd-anchor"></a></div>
 		<section class="tsd-panel-group tsd-index-group">
 			<h2>Index</h2>
 			<section class="tsd-panel tsd-index-panel">
 				<div class="tsd-index-content">
 					<section class="tsd-index-section ">
-						<h3>External modules</h3>
+						<h3>Functions</h3>
 						<ul class="tsd-index-list">
-							<li class="tsd-kind-external-module"><a href="modules/_decoder_.html" class="tsd-kind-icon">"<wbr>Decoder"</a></li>
-							<li class="tsd-kind-external-module"><a href="modules/_internal_errorstringify_.html" class="tsd-kind-icon">"<wbr>Internal/<wbr>Error<wbr>Stringify"</a></li>
-							<li class="tsd-kind-external-module"><a href="modules/_index_.html" class="tsd-kind-icon">"index"</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported"><a href="_internal_errorstringify_.html#cyclicalreferencereplacer" class="tsd-kind-icon">cyclical<wbr>Reference<wbr>Replacer</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_internal_errorstringify_.html#stringify" class="tsd-kind-icon">stringify</a></li>
 						</ul>
 					</section>
 				</div>
+			</section>
+		</section>
+		<section class="tsd-panel-group tsd-member-group ">
+			<h2>Functions</h2>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+				<a name="cyclicalreferencereplacer" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagConst">Const</span> cyclical<wbr>Reference<wbr>Replacer</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+					<li class="tsd-signature tsd-kind-icon">cyclical<wbr>Reference<wbr>Replacer<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">(Anonymous function)</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/72ab0fb/src/Internal/ErrorStringify.ts#L6">Internal/ErrorStringify.ts:6</a></li>
+							</ul>
+						</aside>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">(Anonymous function)</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
+				<a name="stringify" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagConst">Const</span> stringify</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
+					<li class="tsd-signature tsd-kind-icon">stringify<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/kofno/jsonous/blob/72ab0fb/src/Internal/ErrorStringify.ts#L19">Internal/ErrorStringify.ts:19</a></li>
+							</ul>
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>value: <span class="tsd-signature-type">any</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+					</li>
+				</ul>
 			</section>
 		</section>
 		<footer class="with-border-bottom">
