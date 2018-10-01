@@ -1747,7 +1747,7 @@ resolve@~1.1.7:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.1.7.tgz#203114d82ad2c5ed9e8e0411b3932875e889e97b"
 
-resulty@^2.0.1:
+resulty@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/resulty/-/resulty-2.2.0.tgz#5be6b975ba36faa4cb4753bd62ffa620b1c6edce"
 

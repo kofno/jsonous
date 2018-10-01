@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "maybeasy": "^2.0.1",
-    "resulty": "^2.0.1",
+    "resulty": "^2.2.0",
     "weakset": "^1.0.0"
   },
   "prettier": {
