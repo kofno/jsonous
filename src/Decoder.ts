@@ -1,5 +1,5 @@
 import { just, Maybe, nothing } from 'maybeasy';
-import { err, ok, Result } from 'resulty';
+import { err, Err, ok, Result } from 'resulty';
 import { stringify } from './Internal/ErrorStringify';
 
 /**
@@ -214,14 +214,19 @@ export const array = <A>(decoder: Decoder<A>): Decoder<A[]> =>
       return err(errorMsg) as Result<string, A[]>;
     }
 
-    return value.reduce((memo: Result<string, A[]>, element, idx) => {
-      return memo.andThen(results => {
-        return decoder
-          .decodeAny(element)
-          .mapError(s => `I found an error in the array at [${idx}]: ${s}`)
-          .map(v => results.concat([v]));
-      });
-    }, ok([]));
+    let result: Result<string, A[]> = ok([]);
+
+    for (let idx = 0; idx < value.length; idx++) {
+      result = decoder
+        .decodeAny(value[idx])
+        .andThen(v => result.map(vs => vs.concat([v])))
+        .mapError(e => `I found an error in the array at [${idx}]: ${e}`);
+      if (result instanceof Err) {
+        break;
+      }
+    }
+
+    return result;
   });
 
 /**
