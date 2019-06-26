@@ -1,19 +1,5 @@
 import * as test from 'tape';
-import {
-  array,
-  at,
-  boolean,
-  date,
-  dict,
-  field,
-  keyValuePairs,
-  maybe,
-  nullable,
-  number,
-  oneOf,
-  string,
-  succeed,
-} from '../src/index';
+import { array, at, boolean, date, dict, field, keyValuePairs, maybe, nullable, number, oneOf, string, succeed } from '../src/index';
 
 test('string decoder', t => {
   string.decodeJson('"foo"').cata({
@@ -146,6 +132,13 @@ test('at decoder', t => {
     .cata({
       Err: m => t.fail('at should be compatible with nullable'),
       Ok: v => t.pass(`at is compatible with nullable`),
+    });
+
+  at(['foo', 0, 'bar'], number)
+    .decodeAny(undefined)
+    .cata({
+      Err: () => t.pass(`at-ing an undefined to should be an error, but not crash`),
+      Ok: () => t.fail(`at-ing an undefined should not pass`),
     });
 
   t.end();

@@ -215,9 +215,9 @@ export const array = <A>(decoder: Decoder<A>): Decoder<A[]> =>
     }
 
     return value.reduce((memo: Result<string, A[]>, element, idx) => {
-      const result = decoder.decodeAny(element);
       return memo.andThen(results => {
-        return result
+        return decoder
+          .decodeAny(element)
           .mapError(s => `I found an error in the array at [${idx}]: ${s}`)
           .map(v => results.concat([v]));
       });
@@ -260,6 +260,11 @@ export const at = <A>(
   decoder: Decoder<A>
 ): Decoder<A> =>
   new Decoder<A>(value => {
+    if (value == null) {
+      return err(
+        `I found an error. Could not apply 'at' path to an undefined or null value.`
+      );
+    }
     let val = value;
     let idx = 0;
     while (idx < path.length) {
