@@ -17,11 +17,11 @@ export default class Decoder<A> {
   /**
    * Lifts any function up to operate on the value in the Decoder context.
    */
-  public map<B>(f: (a: A) => B): Decoder<B> {
+  public map = <B>(f: (a: A) => B): Decoder<B> => {
     return new Decoder(value => {
       return this.fn(value).map(f);
     });
-  }
+  };
 
   /**
    * Chains decoders together. Can be used when the value from a decoder is
@@ -31,11 +31,11 @@ export default class Decoder<A> {
    *
    * Also, chaining decoders is one way to build new types from decoded objects.
    */
-  public andThen<B>(f: (a: A) => Decoder<B>): Decoder<B> {
+  public andThen = <B>(f: (a: A) => Decoder<B>): Decoder<B> => {
     return new Decoder(value => {
       return this.fn(value).andThen(v => f(v).decodeAny(value));
     });
-  }
+  };
 
   /**
    * This is a special case of chaining. Like `andThen`, `assign` allows you
@@ -46,10 +46,10 @@ export default class Decoder<A> {
    * The idea for assign came from this blog:
    * https://medium.com/@dhruvrajvanshi/simulating-haskells-do-notation-in-typescript-e48a9501751c
    */
-  public assign<K extends string, B>(
+  public assign = <K extends string, B>(
     k: K,
     other: Decoder<B> | ((a: A) => Decoder<B>)
-  ): Decoder<A & { [k in K]: B }> {
+  ): Decoder<A & { [k in K]: B }> => {
     return this.andThen(a => {
       const decoder = other instanceof Decoder ? other : other(a);
       return decoder.map<A & { [k in K]: B }>(b => ({
@@ -57,7 +57,7 @@ export default class Decoder<A> {
         [k.toString()]: b,
       }));
     });
-  }
+  };
 
   /**
    * Inject a side-effectual operation in the middle of a Decoder chain.
@@ -65,69 +65,67 @@ export default class Decoder<A> {
    * I don't reccomend using this mechanusm for making API calls, or anything complex
    * like that.
    */
-  public do(fn: (a: A) => void): Decoder<A> {
+  public do = (fn: (a: A) => void): Decoder<A> => {
     return this.map(v => {
       fn(v);
       return v;
     });
-  }
+  };
 
   /**
    * If a decoder fails, use an alternative decoder.
    */
-  public orElse(f: (e: string) => Decoder<A>): Decoder<A> {
+  public orElse = (f: (e: string) => Decoder<A>): Decoder<A> => {
     return new Decoder(value => {
       return this.fn(value).orElse(e => f(e).decodeAny(value));
     });
-  }
+  };
 
   /**
    * Applies the value from the decoder argument to a function in the current
    * decoder context.
    */
-  public ap<B>(decoder: Decoder<B>) {
+  public ap = <B>(decoder: Decoder<B>) => {
     return new Decoder(value => {
       const unwrapFn = this.fn(value);
       return unwrapFn.ap(decoder.decodeAny(value));
     });
-  }
+  };
 
   /**
    * Run the current decoder on any value
    */
-  public decodeAny(value: any) {
-    return this.fn(value);
-  }
+  public decodeAny = (value: any) => this.fn(value);
 
   /**
    * Parse the json string and run the current decoder on the resulting
    * value. Parse errors are returned in an Result.Err, as with any decoder
    * error.
    */
-  public decodeJson(json: string) {
+  public decodeJson = (json: string) => {
     try {
       const value = JSON.parse(json);
       return this.decodeAny(value);
     } catch (e) {
       return err(e.message) as Result<string, A>;
     }
-  }
+  };
 
   /**
    * Returns a function that runs this docoder over any value when called.
    * This is a convenient way to convert a decoder into a callback.
    */
-  public toAnyFn(): (value: any) => Result<string, A> {
+  public toAnyFn = (): ((value: any) => Result<string, A>) => {
     return (value: any) => this.decodeAny(value);
-  }
+  };
 
   /**
    * Returns a function that runs this decoder over a JSON string when called.
    * This is a convenient way to convert a decoder into a callback.
    */
-  public toJsonFn(): (json: string) => Result<string, A> {
+  public toJsonFn = (): ((json: string) => Result<string, A>) => {
     return (json: string) => this.decodeJson(json);
-  }
+  };
 }
 
 /**
