@@ -1,5 +1,19 @@
 import * as test from 'tape';
-import { array, at, boolean, date, dict, field, keyValuePairs, maybe, nullable, number, oneOf, string, succeed } from '../src/index';
+import {
+  array,
+  at,
+  boolean,
+  date,
+  dict,
+  field,
+  keyValuePairs,
+  maybe,
+  nullable,
+  number,
+  oneOf,
+  string,
+  succeed,
+} from '../src/index';
 
 test('string decoder', t => {
   string.decodeJson('"foo"').cata({
@@ -137,7 +151,8 @@ test('at decoder', t => {
   at(['foo', 0, 'bar'], number)
     .decodeAny(undefined)
     .cata({
-      Err: () => t.pass(`at-ing an undefined to should be an error, but not crash`),
+      Err: () =>
+        t.pass(`at-ing an undefined to should be an error, but not crash`),
       Ok: () => t.fail(`at-ing an undefined should not pass`),
     });
 
@@ -367,19 +382,6 @@ test('oneOf', t => {
   t.end();
 });
 
-test('applicative', t => {
-  const ctor = (s: string) => (n: number) => ({ s, n });
-  const decoder = succeed(ctor)
-    .ap(field('foo', string))
-    .ap(field('bar', number));
-
-  decoder.decodeAny({ foo: 'baz', bar: 42 }).cata({
-    Err: m => t.fail(`should have succeeded: ${m}`),
-    Ok: v => t.pass(`Worked!: ${JSON.stringify(v)}`),
-  });
-  t.end();
-});
-
 test('keyValuePairs', t => {
   const decoder = keyValuePairs(number);
 
@@ -395,7 +397,11 @@ test('keyValuePairs', t => {
 
   decoder.decodeAny({ foo: 42, bar: 2 }).cata({
     Err: m => t.fail(`should have passed: ${m}`),
-    Ok: v => t.deepEqual(v, [['foo', 42], ['bar', 2]]),
+    Ok: v =>
+      t.deepEqual(v, [
+        ['foo', 42],
+        ['bar', 2],
+      ]),
   });
 
   t.end();
