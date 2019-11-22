@@ -985,23 +985,7 @@ succeed({ id, email })))
   .decodeAny({ userId: <span class="hljs-number">213</span>, emailAddress: <span class="hljs-string">'foo@example.com'</span> });
 <span class="hljs-comment">// --&gt; Ok({ id: 213, email: 'foo@example.com' })</span>
 </code></pre>
-			<p>Objects can also be built using the applicative style.</p>
-			<pre><code class="lang-typescript"><span class="hljs-keyword">const</span> ctor = <span class="hljs-function">(<span class="hljs-params">id: <span class="hljs-built_in">number</span></span>) =&gt;</span> (email: <span class="hljs-built_in">string</span>) =&gt; ({ id, email });
-<span class="hljs-keyword">const</span> decoder = succeed(ctor)
-  .ap(field(<span class="hljs-string">'userId'</span>, <span class="hljs-built_in">number</span>))
-  .ap(field(<span class="hljs-string">'emailAddress'</span>, <span class="hljs-built_in">string</span>));
-
-decoder.decodeAny({ userId: <span class="hljs-number">213</span>, emailAddress: <span class="hljs-string">'foo@example.com'</span> });
-<span class="hljs-comment">// --&gt; Ok({ id: 213, email: 'foo@example.com'})</span>
-</code></pre>
-			<p>One stumbling block for this style is that your constructor function must be
-				curried. I&#39;ve manually curried this function, but you could also use a <code>curry</code>
-			function from an FP library like <a href="http://ramdajs.com/docs/#curry">Ramda</a></p>
-			<p>Applicative style requires that the object decoders are applied in the same
-				order as the function parameters are declared. Also, for a significantly
-				complex object, the constructor function will require a boatload of arguments.
-			That&#39;s never fun.</p>
-			<p>In any case, the best strategy for handling object construction with decoders
+			<p>The best strategy for handling object construction with decoders
 			is to compose complex decoders from smaller, simpler decoders.</p>
 			<pre><code class="lang-typescript">succeed({})
   .assign(<span class="hljs-string">'user'</span>, field(<span class="hljs-string">'user'</span>, userDecoder))

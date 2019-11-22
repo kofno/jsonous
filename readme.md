@@ -97,28 +97,7 @@ succeed({})
 // --> Ok({ id: 213, email: 'foo@example.com' })
 ```
 
-Objects can also be built using the applicative style.
-
-```typescript
-const ctor = (id: number) => (email: string) => ({ id, email });
-const decoder = succeed(ctor)
-  .ap(field('userId', number))
-  .ap(field('emailAddress', string));
-
-decoder.decodeAny({ userId: 213, emailAddress: 'foo@example.com' });
-// --> Ok({ id: 213, email: 'foo@example.com'})
-```
-
-One stumbling block for this style is that your constructor function must be
-curried. I've manually curried this function, but you could also use a `curry`
-function from an FP library like [Ramda](http://ramdajs.com/docs/#curry)
-
-Applicative style requires that the object decoders are applied in the same
-order as the function parameters are declared. Also, for a significantly
-complex object, the constructor function will require a boatload of arguments.
-That's never fun.
-
-In any case, the best strategy for handling object construction with decoders
+The best strategy for handling object construction with decoders
 is to compose complex decoders from smaller, simpler decoders.
 
 ```typescript

@@ -82,17 +82,6 @@ export default class Decoder<A> {
   };
 
   /**
-   * Applies the value from the decoder argument to a function in the current
-   * decoder context.
-   */
-  public ap = <B>(decoder: Decoder<B>) => {
-    return new Decoder(value => {
-      const unwrapFn = this.fn(value);
-      return unwrapFn.ap(decoder.decodeAny(value));
-    });
-  };
-
-  /**
    * Run the current decoder on any value
    */
   public decodeAny = (value: any) => this.fn(value);
