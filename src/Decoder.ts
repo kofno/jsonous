@@ -73,11 +73,29 @@ export default class Decoder<A> {
   };
 
   /**
+   * If a decoder fails, map over the failure message.
+   */
+  public mapError = (f: (e: string) => string): Decoder<A> => {
+    return new Decoder(value => {
+      return this.fn(value).mapError(f);
+    });
+  };
+
+  /**
    * If a decoder fails, use an alternative decoder.
    */
   public orElse = (f: (e: string) => Decoder<A>): Decoder<A> => {
     return new Decoder(value => {
       return this.fn(value).orElse(e => f(e).decodeAny(value));
+    });
+  };
+
+  /**
+   * If a decoder fails, do something side-effectual
+   */
+  public elseDo = (f: (e: string) => void): Decoder<A> => {
+    return new Decoder(value => {
+      return this.fn(value).elseDo(f);
     });
   };
 
