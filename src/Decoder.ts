@@ -18,7 +18,7 @@ export default class Decoder<A> {
    * Lifts any function up to operate on the value in the Decoder context.
    */
   public map = <B>(f: (a: A) => B): Decoder<B> => {
-    return new Decoder(value => {
+    return new Decoder((value) => {
       return this.fn(value).map(f);
     });
   };
@@ -32,8 +32,8 @@ export default class Decoder<A> {
    * Also, chaining decoders is one way to build new types from decoded objects.
    */
   public andThen = <B>(f: (a: A) => Decoder<B>): Decoder<B> => {
-    return new Decoder(value => {
-      return this.fn(value).andThen(v => f(v).decodeAny(value));
+    return new Decoder((value) => {
+      return this.fn(value).andThen((v) => f(v).decodeAny(value));
     });
   };
 
@@ -50,9 +50,9 @@ export default class Decoder<A> {
     k: K,
     other: Decoder<B> | ((a: A) => Decoder<B>)
   ): Decoder<A & { [k in K]: B }> => {
-    return this.andThen(a => {
+    return this.andThen((a) => {
       const decoder = other instanceof Decoder ? other : other(a);
-      return decoder.map<A & { [k in K]: B }>(b => ({
+      return decoder.map<A & { [k in K]: B }>((b) => ({
         ...Object(a),
         [k.toString()]: b,
       }));
@@ -66,7 +66,7 @@ export default class Decoder<A> {
    * like that.
    */
   public do = (fn: (a: A) => void): Decoder<A> => {
-    return this.map(v => {
+    return this.map((v) => {
       fn(v);
       return v;
     });
@@ -76,7 +76,7 @@ export default class Decoder<A> {
    * If a decoder fails, map over the failure message.
    */
   public mapError = (f: (e: string) => string): Decoder<A> => {
-    return new Decoder(value => {
+    return new Decoder((value) => {
       return this.fn(value).mapError(f);
     });
   };
@@ -85,8 +85,8 @@ export default class Decoder<A> {
    * If a decoder fails, use an alternative decoder.
    */
   public orElse = (f: (e: string) => Decoder<A>): Decoder<A> => {
-    return new Decoder(value => {
-      return this.fn(value).orElse(e => f(e).decodeAny(value));
+    return new Decoder((value) => {
+      return this.fn(value).orElse((e) => f(e).decodeAny(value));
     });
   };
 
@@ -94,7 +94,7 @@ export default class Decoder<A> {
    * If a decoder fails, do something side-effectual
    */
   public elseDo = (f: (e: string) => void): Decoder<A> => {
-    return new Decoder(value => {
+    return new Decoder((value) => {
       return this.fn(value).elseDo(f);
     });
   };
@@ -138,20 +138,20 @@ export default class Decoder<A> {
 /**
  * Returns a decoder that always succeeds, resolving to the value passed in.
  */
-export const succeed = <A>(value: A) => new Decoder(_ => ok(value));
+export const succeed = <A>(value: A) => new Decoder((_) => ok(value));
 
 /**
  * Returns a decoder that always fails, returning an Err with the message
  * passed in.
  */
 export const fail = <A>(message: string): Decoder<A> =>
-  new Decoder(_ => err(message));
+  new Decoder((_) => err(message));
 
 /**
  * String decoder
  */
 // tslint:disable-next-line:variable-name
-export const string: Decoder<string> = new Decoder<string>(value => {
+export const string: Decoder<string> = new Decoder<string>((value) => {
   if (typeof value !== 'string') {
     const stringified = stringify(value);
     const errorMsg = `I expected to find a string but instead I found ${stringified}`;
@@ -165,7 +165,7 @@ export const string: Decoder<string> = new Decoder<string>(value => {
  * Number decoder
  */
 // tslint:disable-next-line:variable-name
-export const number: Decoder<number> = new Decoder<number>(value => {
+export const number: Decoder<number> = new Decoder<number>((value) => {
   if (typeof value !== 'number') {
     const errorMsg = `I expected to find a number but instead I found ${stringify(
       value
@@ -180,7 +180,7 @@ export const number: Decoder<number> = new Decoder<number>(value => {
  * Boolean decoder
  */
 // tslint:disable-next-line:variable-name
-export const boolean: Decoder<boolean> = new Decoder<boolean>(value => {
+export const boolean: Decoder<boolean> = new Decoder<boolean>((value) => {
   if (typeof value !== 'boolean') {
     const errorMsg = `I expected to find a boolean but instead found ${stringify(
       value
@@ -197,13 +197,13 @@ export const boolean: Decoder<boolean> = new Decoder<boolean>(value => {
  * Date decoder expects a value that is a number or a string. It will then try
  * to construct a JavaScript date object from the value.
  */
-export const date: Decoder<Date> = new Decoder<Date>(value => {
+export const date: Decoder<Date> = new Decoder<Date>((value) => {
   const errMsg = (v: any): string =>
     `I expected a date but instead I found ${stringify(v)}`;
   return ok(value)
-    .andThen(s => string.map(v => new Date(v)).decodeAny(s))
-    .orElse(n => number.map(v => new Date(v)).decodeAny(n))
-    .andThen(d => (isNaN(d.getTime()) ? err<any, Date>(value) : ok(d)))
+    .andThen((s) => string.map((v) => new Date(v)).decodeAny(s))
+    .orElse((n) => number.map((v) => new Date(v)).decodeAny(n))
+    .andThen((d) => (isNaN(d.getTime()) ? err<any, Date>(value) : ok(d)))
     .mapError(() => errMsg(value));
 });
 
@@ -211,7 +211,7 @@ export const date: Decoder<Date> = new Decoder<Date>(value => {
  * Applies the `decoder` to all of the elements of an array.
  */
 export const array = <A>(decoder: Decoder<A>): Decoder<A[]> =>
-  new Decoder<A[]>(value => {
+  new Decoder<A[]>((value) => {
     if (!(value instanceof Array)) {
       const errorMsg = `I expected an array but instead I found ${stringify(
         value
@@ -224,8 +224,8 @@ export const array = <A>(decoder: Decoder<A>): Decoder<A[]> =>
     for (let idx = 0; idx < value.length; idx++) {
       result = decoder
         .decodeAny(value[idx])
-        .andThen(v => result.map(vs => vs.concat([v])))
-        .mapError(e => `I found an error in the array at [${idx}]: ${e}`);
+        .andThen((v) => result.map((vs) => vs.concat([v])))
+        .mapError((e) => `${e}:\nerror found in an array at [${idx}]`);
       if (result instanceof Err) {
         break;
       }
@@ -238,7 +238,7 @@ export const array = <A>(decoder: Decoder<A>): Decoder<A[]> =>
  * Decodes the value at a particular field in a JavaScript object.
  */
 export const field = <A>(name: string, decoder: Decoder<A>): Decoder<A> =>
-  new Decoder<A>(value => {
+  new Decoder<A>((value) => {
     const errorMsg = () => {
       const stringified = stringify(value);
       const msg = `I expected to find an object with key '${name}' but instead I found ${stringified}`;
@@ -254,12 +254,7 @@ export const field = <A>(name: string, decoder: Decoder<A>): Decoder<A> =>
     const v = value[name];
     return decoder
       .decodeAny(v)
-      .mapError(
-        e =>
-          `I found an error in the field named '${name}' of ${stringify(
-            value
-          )}: ${e}`
-      );
+      .mapError((e) => `${e}:\noccurred in a field named '${name}'`);
   });
 
 /**
@@ -269,7 +264,7 @@ export const at = <A>(
   path: Array<number | string>,
   decoder: Decoder<A>
 ): Decoder<A> =>
-  new Decoder<A>(value => {
+  new Decoder<A>((value) => {
     if (value == null) {
       return err(
         `I found an error. Could not apply 'at' path to an undefined or null value.`
@@ -296,10 +291,10 @@ export const at = <A>(
  * decoder because it makes any failed decoder result a nothing.
  */
 export const maybe = <A>(decoder: Decoder<A>): Decoder<Maybe<A>> =>
-  new Decoder(value => {
+  new Decoder((value) => {
     return decoder.decodeAny(value).cata({
-      Err: e => ok(nothing()),
-      Ok: v => ok(just(v)),
+      Err: (e) => ok(nothing()),
+      Ok: (v) => ok(just(v)),
     });
   });
 
@@ -322,7 +317,7 @@ export const maybe = <A>(decoder: Decoder<A>): Decoder<Maybe<A>> =>
  *     nullable(string).decodeAny(42)    // => Err...
  */
 export const nullable = <A>(decoder: Decoder<A>): Decoder<Maybe<A>> =>
-  new Decoder(value => {
+  new Decoder((value) => {
     if (value == null) {
       return ok(nothing());
     }
@@ -334,18 +329,18 @@ export const nullable = <A>(decoder: Decoder<A>): Decoder<Maybe<A>> =>
  * fail.
  */
 export const oneOf = <A>(decoders: Array<Decoder<A>>): Decoder<A> =>
-  new Decoder(value => {
+  new Decoder((value) => {
     if (decoders.length === 0) {
       return err<string, A>('No decoders specified.');
     }
 
     const result = decoders.reduce((memo, decoder) => {
-      return memo.orElse(err1 =>
-        decoder.decodeAny(value).mapError(err2 => `${err1}\n${err2}`)
+      return memo.orElse((err1) =>
+        decoder.decodeAny(value).mapError((err2) => `${err1}\n${err2}`)
       );
     }, err<string, A>(''));
 
-    return result.mapError(m => `I found the following problems:\n${m}`);
+    return result.mapError((m) => `I found the following problems:\n${m}`);
   });
 
 /**
@@ -356,7 +351,7 @@ export const oneOf = <A>(decoders: Array<Decoder<A>>): Decoder<A> =>
  * @param decoder The internal decoder to be applied to the object values
  */
 export const keyValuePairs = <A>(decoder: Decoder<A>): Decoder<[string, A][]> =>
-  new Decoder(value => {
+  new Decoder((value) => {
     if (typeof value !== 'object' || value === null || value instanceof Array) {
       return err<string, [string, A][]>(
         `Expected to find an object and instead found '${stringify(value)}'`
@@ -365,11 +360,11 @@ export const keyValuePairs = <A>(decoder: Decoder<A>): Decoder<[string, A][]> =>
 
     return Object.keys(value).reduce(
       (memo, key) =>
-        memo.andThen(pairs =>
+        memo.andThen((pairs) =>
           decoder
             .decodeAny(value[key])
-            .mapError(err => `Key '${key}' failed to decode: ${err}`)
-            .map(v => pairs.concat([[key, v]]))
+            .mapError((err) => `Key '${key}' failed to decode: ${err}`)
+            .map((v) => pairs.concat([[key, v]]))
         ),
       ok([]) as Result<string, [string, A][]>
     );
@@ -385,7 +380,7 @@ export const keyValuePairs = <A>(decoder: Decoder<A>): Decoder<[string, A][]> =>
  * @param decoder The internal decoder to be applied to the object values
  */
 export const dict = <A>(decoder: Decoder<A>): Decoder<Map<string, A>> =>
-  keyValuePairs(decoder).map(pairs =>
+  keyValuePairs(decoder).map((pairs) =>
     pairs.reduce((memo, [key, value]) => {
       memo.set(key, value);
       return memo;
