@@ -1,6 +1,5 @@
 # jsonous
 
-[![Build Status](https://travis-ci.org/kofno/jsonous.svg?branch=master)](https://travis-ci.org/kofno/jsonous)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 If you're building a web application, you're eventually going to need a reliable
@@ -73,8 +72,8 @@ Of course, your code editor may try to reformat this code.
 
 ```typescript
 field('userId', number)
-  .andThen(id =>
-    field('emailAddress', string).andThen(email => succeed({ id, email }))
+  .andThen((id) =>
+    field('emailAddress', string).andThen((email) => succeed({ id, email }))
   )
   .decodeAny({ userId: 213, emailAddress: 'foo@example.com' });
 // --> Ok({ id: 213, email: 'foo@example.com'})

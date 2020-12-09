@@ -4,6 +4,8 @@ import {
   at,
   boolean,
   date,
+  dateISO,
+  dateJSON,
   dict,
   field,
   keyValuePairs,
@@ -71,6 +73,34 @@ test('date decoder', (t) => {
   date.decodeJson('null').cata({
     Err: (m) => t.pass(`date decoder failed: ${m}`),
     Ok: (v) => t.fail(`Expected date decoder to fail: ${v}`),
+  });
+
+  t.end();
+});
+
+test('dateISO decoder', (t) => {
+  dateISO.decodeAny('2020-12-25').cata({
+    Err: (m) => t.fail(`date iso decoder should have passed: ${m}`),
+    Ok: (v) => t.pass(`date iso decoder worked on ${v}`),
+  });
+
+  dateISO.decodeAny('2020-12-32').cata({
+    Err: (m) => t.pass(`date iso decoder failed as expected: ${m}`),
+    Ok: (v) => t.fail(`date iso decoder should have failed: ${v}`),
+  });
+
+  t.end();
+});
+
+test('dateJSON decoder', (t) => {
+  dateJSON.decodeAny('2020-12-25T05:20:10.123Z').cata({
+    Err: (m) => t.fail(`date iso decoder should have passed: ${m}`),
+    Ok: (v) => t.pass(`date iso decoder worked on ${v}`),
+  });
+
+  dateJSON.decodeAny('2020-12-25').cata({
+    Err: (m) => t.pass(`date iso decoder failed as expected: ${m}`),
+    Ok: (v) => t.fail(`date iso decoder should have failed: ${v}`),
   });
 
   t.end();
