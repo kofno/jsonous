@@ -1,24 +1,16 @@
 {
-    "compileOnSave": true,
-    "compilerOptions": {
-        "module": "commonjs",
-        "target": "ES5",
-        "noImplicitAny": true,
-        "preserveConstEnums": true,
-        "alwaysStrict": true,
-        "strictNullChecks": true,
-        "sourceMap": true,
-        "declaration": true,
-        "outDir": ".",
-        "lib": [
-            "es6"
-        ]
-    },
-    "include": [
-        "src/**/*"
-    ],
-    "exclude": [
-        "node_modules",
-        "**/*.test.ts"
-    ]
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "lib": ["esnext"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "declaration": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "**/*.test.ts"]
 }
