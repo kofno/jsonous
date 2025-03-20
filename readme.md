@@ -26,15 +26,20 @@ yarn add jsonous
 
 ## Core Concepts
 
-1. Decoders
+1. _Decoders_
+
    At the heart of Jsonous are decoders. A decoder is a function that takes a value (typically from parsed JSON) and attempts to convert it into a specific type. If the value conforms to the expected type and structure, the decoder succeeds and returns the value. Otherwise, it fails and returns an error message.
 
-2. Result Type
+2. _Result Type_
+
    Jsonous uses the Result type (from the resulty library) to represent the outcome of a decoding operation. A Result can be either:
 
-Ok(value): Indicates successful decoding, containing the decoded value.
-Err(message): Indicates a decoding failure, containing an error message. 3. Composable Decoders
-Jsonous provides a rich set of primitive decoders and powerful combinators that allow you to build complex decoders from simpler ones. This composability is key to handling real-world JSON structures.
+   Ok(value): Indicates successful decoding, containing the decoded value.
+   Err(message): Indicates a decoding failure, containing an error message.
+
+3. _Composable Decoders_
+
+   Jsonous provides a rich set of primitive decoders and powerful combinators that allow you to build complex decoders from simpler ones. This composability is key to handling real-world JSON structures.
 
 ## Usage Examples
 
