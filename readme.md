@@ -36,8 +36,6 @@ yarn add jsonous
 
    Ok(value): Indicates successful decoding, containing the decoded value.
 
-   Err(message): Indicates a decoding failure, containing an error message.
-
 3. _Composable Decoders_
 
    Jsonous provides a rich set of primitive decoders and powerful combinators that allow you to build complex decoders from simpler ones. This composability is key to handling real-world JSON structures.
