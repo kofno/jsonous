@@ -35,6 +35,7 @@ yarn add jsonous
    Jsonous uses the Result type (from the resulty library) to represent the outcome of a decoding operation. A Result can be either:
 
    Ok(value): Indicates successful decoding, containing the decoded value.
+
    Err(message): Indicates a decoding failure, containing an error message.
 
 3. _Composable Decoders_
