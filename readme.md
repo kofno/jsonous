@@ -1,7 +1,5 @@
 # Jsonous: Type-Safe JSON Decoding for JavaScript and TypeScript
 
-[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
-
 Jsonous is a powerful library designed to bring type safety and robustness to JSON decoding in JavaScript and TypeScript applications. Inspired by Elm's renowned JSON decoders, Jsonous provides a declarative and composable way to parse and validate JSON data, ensuring that it conforms to your application's expected structure and types.
 
 ## The Problem: Untrusted JSON Data
