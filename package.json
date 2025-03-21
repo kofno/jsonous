@@ -1,6 +1,6 @@
 {
   "name": "jsonous",
-  "version": "9.1.0",
+  "version": "10.0.0-pre.0",
   "description": "Type safe JSON decoding for JavaScript",
   "author": "Ryan L. Bell <ryan.l.bell@gmail.com>",
   "license": "MIT",
@@ -14,9 +14,10 @@
     "dev": "tsup --watch"
   },
   "devDependencies": {
-    "@types/tape": "^4.13.0",
-    "typedoc": "^0.19.2",
-    "tsup": "^8.0.2"
+    "typedoc": "^0.28.0",
+    "tsup": "^8.4.0",
+    "@types/bun": "^1.2.5",
+    "typescript": "^5.8.2"
   },
   "dependencies": {
     "maybeasy": "^6.3.0",
