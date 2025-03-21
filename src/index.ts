@@ -1,7 +1,7 @@
 // src/index.ts
 
 // Base Decoders
-export { boolean, eql, fail, number, string, stringLiteral, succeed } from './base';
+export { boolean, fail, number, string, succeed } from './base';
 
 // Container Decoders
 export { array, at, field } from './containers';
@@ -15,11 +15,17 @@ export { maybe, nullable } from './presence';
 // Date Decoders
 export { date, dateISO, dateJSON } from './dates';
 
+// Predicates
+export { eql } from './predicates';
+
 // Structures
-export { createDecoderFromStructure, oneOf } from './structures';
+export { createDecoderFromStructure, oneOf, stringLiteral } from './structures';
 
 // Decoder Class
 export { default as Decoder } from './Decoder';
+
+// Strings
+export { regex } from './strings';
 
 // Types
 export type { InferType, InferTypeFromFn } from './types';

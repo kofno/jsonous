@@ -3,6 +3,16 @@ import Decoder from './Decoder';
 import { succeed } from './base';
 import { field } from './containers';
 import { identity } from './utils';
+import { eql } from './predicates';
+
+/**
+ * Creates a decoder that checks if the input is equal to the specified string literal.
+ *
+ * @template T - The type of the string literal.
+ * @param t - The string literal to compare against.
+ * @returns A decoder that validates if the input matches the string literal.
+ */
+export const stringLiteral = <T extends string>(t: T): Decoder<T> => eql<T>(t);
 
 /**
  * Creates a decoder that tries to decode a value using a list of provided decoders.
@@ -57,12 +67,37 @@ export function createDecoderFromStructure<T extends Structure>(
   }, succeed({}) as Decoder<any>);
 }
 
+/**
+ * Checks if the provided value is an instance of the Decoder class.
+ *
+ * @param value - The value to check.
+ * @returns A boolean indicating whether the value is a Decoder instance.
+ */
 function isDecoder(value: any): value is Decoder<any> {
   return value instanceof Decoder;
 }
 
+/**
+ * Represents a structure where each key is associated with either a `Decoder` of any type or another nested `Structure`.
+ * This allows for the creation of complex, nested data structures that can be decoded.
+ *
+ * @typeParam key - The key of the structure, which is a string.
+ * @typeParam Decoder - A generic type representing a decoder for any type.
+ */
 type Structure = { [key: string]: Decoder<any> | Structure };
 
+/**
+ * Infers the TypeScript type from a given `Structure` type.
+ *
+ * This utility type recursively maps over the keys of the `Structure` type `T`
+ * and infers the corresponding TypeScript type for each key.
+ *
+ * - If the value of a key is a `Decoder` type, it infers the type `U` that the `Decoder` decodes to.
+ * - If the value of a key is another `Structure`, it recursively infers the structure of that nested `Structure`.
+ * - Otherwise, it results in `never`.
+ *
+ * @template T - The `Structure` type from which to infer the TypeScript type.
+ */
 type InferStructure<T extends Structure> = {
   [K in keyof T]: T[K] extends Decoder<infer U>
     ? U

@@ -86,24 +86,3 @@ export const boolean: Decoder<boolean> = new Decoder<boolean>((value) => {
 
   return ok(value);
 });
-
-/**
- * Creates a decoder that checks if the input value is equal to the specified value.
- *
- * @typeParam T - The type of the value to compare.
- * @param t - The value to compare against the input.
- * @returns A `Decoder` that succeeds if the input value is equal to `t`, otherwise fails with an error message.
- */
-export const eql = <T>(t: T): Decoder<T> =>
-  new Decoder<T>((v) => {
-    return t === v ? ok(v) : err(`Expected ${t} but got ${safeStringify(v)}`);
-  });
-
-/**
- * Creates a decoder that checks if the input is equal to the specified string literal.
- *
- * @template T - The type of the string literal.
- * @param t - The string literal to compare against.
- * @returns A decoder that validates if the input matches the string literal.
- */
-export const stringLiteral = <T extends string>(t: T): Decoder<T> => eql<T>(t);

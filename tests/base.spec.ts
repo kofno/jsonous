@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test';
 import { Result } from 'resulty';
-import { boolean, eql, fail, number, string, stringLiteral, succeed } from '../src/base';
+import { boolean, fail, number, string, succeed } from '../src/base';
 
 // Helper function to check for errors
 function expectError<T>(result: Result<string, T>, expectedError: string) {
@@ -104,42 +104,6 @@ describe('base', () => {
       );
       expectError(boolean.decodeAny({}), 'I expected to find a boolean but instead found {}');
       expectError(boolean.decodeAny([]), 'I expected to find a boolean but instead found []');
-    });
-  });
-
-  describe('eql', () => {
-    it('should succeed when the input is equal to the specified value', () => {
-      const decoder = eql(5);
-      expectSuccess(decoder.decodeAny(5), 5);
-    });
-
-    it('should fail when the input is not equal to the specified value', () => {
-      const decoder = eql(5);
-      expectError(decoder.decodeAny(10), 'Expected 5 but got 10');
-      expectError(decoder.decodeAny('5'), 'Expected 5 but got "5"');
-      expectError(decoder.decodeAny(true), 'Expected 5 but got true');
-      expectError(decoder.decodeAny(null), 'Expected 5 but got null');
-      expectError(decoder.decodeAny(undefined), 'Expected 5 but got undefined');
-      expectError(decoder.decodeAny({}), 'Expected 5 but got {}');
-      expectError(decoder.decodeAny([]), 'Expected 5 but got []');
-    });
-  });
-
-  describe('stringLiteral', () => {
-    it('should succeed when the input is equal to the specified string literal', () => {
-      const decoder = stringLiteral('hello');
-      expectSuccess(decoder.decodeAny('hello'), 'hello');
-    });
-
-    it('should fail when the input is not equal to the specified string literal', () => {
-      const decoder = stringLiteral('hello');
-      expectError(decoder.decodeAny('world'), 'Expected hello but got "world"');
-      expectError(decoder.decodeAny(5), 'Expected hello but got 5');
-      expectError(decoder.decodeAny(true), 'Expected hello but got true');
-      expectError(decoder.decodeAny(null), 'Expected hello but got null');
-      expectError(decoder.decodeAny(undefined), 'Expected hello but got undefined');
-      expectError(decoder.decodeAny({}), 'Expected hello but got {}');
-      expectError(decoder.decodeAny([]), 'Expected hello but got []');
     });
   });
 });

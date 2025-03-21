@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'bun:test';
 import { Result } from 'resulty';
 import Decoder from '../src/Decoder';
-import { boolean, number, string, stringLiteral } from '../src/base';
+import { boolean, number, string } from '../src/base';
 import { array } from '../src/containers';
-import { createDecoderFromStructure, oneOf } from '../src/structures';
+import { createDecoderFromStructure, oneOf, stringLiteral } from '../src/structures';
 import { InferType } from '../src/types';
 import { identity, snakeCase } from '../src/utils';
 
@@ -192,6 +192,24 @@ describe('structures', () => {
       const obj = { first_name: 'John', last_name: 'Doe' };
 
       expectSuccess(decoder.decodeAny(obj), { firstName: 'John', lastName: 'Doe' });
+    });
+  });
+
+  describe('stringLiteral', () => {
+    it('should succeed when the input is equal to the specified string literal', () => {
+      const decoder = stringLiteral('hello');
+      expectSuccess(decoder.decodeAny('hello'), 'hello');
+    });
+
+    it('should fail when the input is not equal to the specified string literal', () => {
+      const decoder = stringLiteral('hello');
+      expectError(decoder.decodeAny('world'), 'Expected hello but got "world"');
+      expectError(decoder.decodeAny(5), 'Expected hello but got 5');
+      expectError(decoder.decodeAny(true), 'Expected hello but got true');
+      expectError(decoder.decodeAny(null), 'Expected hello but got null');
+      expectError(decoder.decodeAny(undefined), 'Expected hello but got undefined');
+      expectError(decoder.decodeAny({}), 'Expected hello but got {}');
+      expectError(decoder.decodeAny([]), 'Expected hello but got []');
     });
   });
 });
