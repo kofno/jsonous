@@ -91,7 +91,7 @@ export function objectOf<T>(valueDecoder: Decoder<T>): Decoder<{ [key: string]: 
     }
 
     const result: { [key: string]: T } = {};
-    for (const key in value) {
+    for (const key of Object.keys(value)) {
       const decodedValue = valueDecoder.decodeAny(value[key]);
       if (decodedValue.state.kind === 'err') {
         return err(
