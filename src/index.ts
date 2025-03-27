@@ -7,7 +7,7 @@ export { boolean, fail, number, string, succeed } from './base';
 export { array, at, field } from './containers';
 
 // Associative Decoders
-export { dict, keyValuePairs } from './associative';
+export { dict, keyValuePairs, objectOf } from './associative';
 
 // Presence Decoders
 export { maybe, nullable } from './presence';
