@@ -52,27 +52,27 @@ describe('associative', () => {
     it('should fail with a non-object', () => {
       expectError(
         decadeDataRowDecoder.decodeAny('hello'),
-        'I expected to find an object but instead found string'
+        'I expected to find an object but instead found \'"hello"\''
       );
       expectError(
         decadeDataRowDecoder.decodeAny(123),
-        'I expected to find an object but instead found number'
+        "I expected to find an object but instead found '123'"
       );
       expectError(
         decadeDataRowDecoder.decodeAny(true),
-        'I expected to find an object but instead found boolean'
+        "I expected to find an object but instead found 'true'"
       );
       expectError(
         decadeDataRowDecoder.decodeAny(null),
-        'I expected to find an object but instead found object'
+        "I expected to find an object but instead found 'null'"
       );
       expectError(
         decadeDataRowDecoder.decodeAny(undefined),
-        'I expected to find an object but instead found undefined'
+        "I expected to find an object but instead found 'undefined'"
       );
       expectError(
         decadeDataRowDecoder.decodeAny([]),
-        'I expected to find an object but instead found object'
+        "I expected to find an object but instead found '[]'"
       );
     });
 

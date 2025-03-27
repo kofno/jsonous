@@ -87,14 +87,11 @@ export const dict = <A>(decoder: Decoder<A>): Decoder<Map<string, A>> =>
 export function objectOf<T>(valueDecoder: Decoder<T>): Decoder<{ [key: string]: T }> {
   return new Decoder<{ [key: string]: T }>((value) => {
     if (typeof value !== 'object' || value === null || Array.isArray(value)) {
-      return err(`I expected to find an object but instead found ${typeof value}`);
+      return err(`I expected to find an object but instead found '${safeStringify(value)}'`);
     }
 
     const result: { [key: string]: T } = {};
     for (const key in value) {
-      if (typeof key !== 'string') {
-        return err(`I expected all keys to be strings, but found a non-string key: ${key}`);
-      }
       const decodedValue = valueDecoder.decodeAny(value[key]);
       if (decodedValue.state.kind === 'err') {
         return err(
