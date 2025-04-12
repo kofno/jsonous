@@ -19,7 +19,7 @@ export { date, dateISO, dateJSON } from './dates';
 export { eql } from './predicates';
 
 // Structures
-export { createDecoderFromStructure, oneOf, stringLiteral } from './structures';
+export { createDecoderFromStructure, oneOf, stringLiteral, discriminatedUnion } from './structures';
 
 // Decoder Class
 export { default as Decoder } from './Decoder';

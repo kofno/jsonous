@@ -1,9 +1,10 @@
 import { err, Result } from 'resulty';
 import Decoder from './Decoder';
-import { succeed } from './base';
+import { string, succeed } from './base';
 import { field } from './containers';
-import { identity } from './utils';
+import { identity, safeStringify } from './utils';
 import { eql } from './predicates';
+import { InferType } from './types';
 
 /**
  * Creates a decoder that checks if the input is equal to the specified string literal.
@@ -105,3 +106,87 @@ type InferStructure<T extends Structure> = {
     ? InferStructure<T[K]>
     : never;
 };
+
+// Helper type to infer the union type from the mapping values
+type InferUnionFromMapping<T extends { [K in string]: Decoder<any> }> = {
+  [K in keyof T]: InferType<T[K]>;
+}[keyof T]; // This extracts the types of all decoders in the mapping and creates a union
+
+/**
+ * Creates a decoder for a discriminated union type. A discriminated union is a union of object types
+ * where each object type is identified by a specific value in a shared discriminator field.
+ *
+ * @template DiscriminatorKey - The name of the discriminator field (e.g., `'type'`).
+ * @template Mapping - A mapping object where keys are discriminator values and values are decoders
+ *                     for the corresponding object types.
+ *
+ * @param discriminatorField - The name of the field used to discriminate between union variants.
+ * @param mapping - An object mapping discriminator values to their respective decoders.
+ *
+ * @returns A `Decoder` that decodes values into the appropriate union variant based on the discriminator field.
+ *
+ * @throws If the discriminator field is missing, has an invalid value, or if the value does not match
+ *         any key in the mapping, an error is returned.
+ *
+ * @example
+ * ```typescript
+ * const userDecoder = object({ type: stringLiteral('user'), name: string });
+ * const adminDecoder = object({ type: stringLiteral('admin'), permissions: array(string) });
+ *
+ * const unionDecoder = discriminatedUnion('type', {
+ *   user: userDecoder,
+ *   admin: adminDecoder,
+ * });
+ *
+ * const result = unionDecoder.decode({
+ *   type: 'user',
+ *   name: 'Alice',
+ * });
+ * // result: { type: 'user', name: 'Alice' }
+ * ```
+ */
+export function discriminatedUnion<
+  DiscriminatorKey extends string, // The name of the discriminator field (e.g., 'type')
+  Mapping extends { [K in string]: Decoder<any> } // The map from discriminator value to decoder
+>(discriminatorField: DiscriminatorKey, mapping: Mapping): Decoder<InferUnionFromMapping<Mapping>> {
+  // Return type is the union of all variant types
+
+  // Pre-decode the discriminator field to check its type (usually string)
+  const discriminatorDecoder = field(discriminatorField, string); // Assuming string discriminator
+
+  return new Decoder((value) => {
+    // 1. Decode the discriminator value first
+    const discriminatorResult = discriminatorDecoder.decodeAny(value);
+
+    if (discriminatorResult.state.kind === 'err') {
+      // Error if the discriminator field is missing or not a string
+      return err(
+        `Missing or invalid discriminator field '${discriminatorField}' in ${safeStringify(value)}`
+      );
+    }
+
+    const discriminatorValue = discriminatorResult.state.value; // e.g., 'user', 'admin'
+
+    // 2. Find the corresponding decoder in the mapping
+    const selectedDecoder = mapping[discriminatorValue];
+
+    if (!selectedDecoder) {
+      // Error if the discriminator value doesn't match any key in the mapping
+      const knownTypes = Object.keys(mapping).join(', ');
+      return err(
+        `Unexpected discriminator value '${discriminatorValue}' for field '${discriminatorField}'. Expected one of: ${knownTypes}. Found in: ${safeStringify(
+          value
+        )}`
+      );
+    }
+
+    // 3. Apply the selected decoder to the original value
+    // We apply it to the whole value, assuming the variant decoder expects the discriminator field too
+    // (which is common if using createDecoderFromStructure with stringLiteral)
+    return selectedDecoder
+      .decodeAny(value)
+      .mapError(
+        (e) => `Error decoding variant with ${discriminatorField}='${discriminatorValue}': ${e}`
+      );
+  });
+}
