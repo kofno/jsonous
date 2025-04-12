@@ -169,6 +169,128 @@ const adminResult: Result<string, Person> = personDecoder.decodeAny({
 const personError: Result<string, Person> = personDecoder.decodeAny({ name: 'Bob' }); // Err("I found the following problems:\nI expected to find a number but instead I found undefined\nI expected an array but instead I found undefined")
 ```
 
+### Discriminated Unions (`discriminatedUnion`)
+
+Decoding discriminated unions (also known as tagged unions or sum types) is a common pattern in TypeScript. While you _can_ achieve this using `oneOf`, it often requires manually mapping each variant decoder to the union type (e.g., `decoder.map<UnionType>(identity)`) and can produce less specific error messages when a value doesn't match any variant.
+
+The `discriminatedUnion` decoder provides a more ergonomic, efficient, and type-safe solution specifically for this pattern.
+
+**How it Works:**
+
+1.  It reads the value of a specified `discriminatorField` (e.g., `"type"`, `"kind"`). This field's value _must_ be a string.
+2.  It uses this string value to look up the corresponding `Decoder` in a provided `mapping` object.
+3.  It runs _only_ the selected decoder on the original input value.
+
+**Signature:**
+
+```typescript
+import { Decoder, InferType } from 'jsonous'; // Or your actual import path
+
+// Helper type (you don't need to import this, it's used internally)
+type InferUnionFromMapping<T extends { [K in string]: Decoder<any> }> = {
+  [K in keyof T]: InferType<T[K]>;
+}[keyof T];
+
+function discriminatedUnion<
+  DiscriminatorKey extends string, // The name of the discriminator field (e.g., 'type')
+  Mapping extends { [K in string]: Decoder<any> } // Map: discriminator value -> Decoder
+>(discriminatorField: DiscriminatorKey, mapping: Mapping): Decoder<InferUnionFromMapping<Mapping>>; // Returns Decoder<VariantA | VariantB | ...>
+```
+
+- discriminatorField: The name of the common field (e.g., 'type', 'kind') whose string value determines the variant.
+- mapping: An object where keys are the possible string values of the discriminatorField, and values are the Decoder instances for the corresponding variant.
+- Return Type: Returns a Decoder for the automatically inferred union type (e.g., Decoder<VariantA | VariantB | ...>).
+
+**Example:**
+
+Let's say you have the following TypeScript types:
+
+```typescript
+interface User {
+  type: 'user';
+  name: string;
+  age: number;
+}
+
+interface Admin {
+  type: 'admin';
+  name: string;
+  permissions: string[];
+}
+
+type Person = User | Admin;
+```
+
+You can create decoders for each variant and then combine them using `discriminatedUnion`:
+
+```typescript
+import {
+  string,
+  number,
+  array,
+  stringLiteral,
+  createDecoderFromStructure,
+  discriminatedUnion,
+  Decoder, // Assuming Decoder is exported if needed elsewhere
+} from 'jsonous'; // Or your actual import path
+
+// Define decoders for each variant
+// Note: It's good practice for each variant decoder to validate its own discriminator value using stringLiteral
+const userDecoder: Decoder<User> = createDecoderFromStructure({
+  type: stringLiteral('user'),
+  name: string,
+  age: number,
+});
+
+const adminDecoder: Decoder<Admin> = createDecoderFromStructure({
+  type: stringLiteral('admin'),
+  name: string,
+  permissions: array(string),
+});
+
+// Create the discriminated union decoder
+const personDecoder: Decoder<Person> = discriminatedUnion('type', {
+  user: userDecoder,
+  admin: adminDecoder,
+});
+
+// --- Usage ---
+
+const userData = { type: 'user', name: 'Alice', age: 30 };
+const adminData = { type: 'admin', name: 'Bob', permissions: ['read', 'write'] };
+const invalidTypeData = { type: 'guest', name: 'Charlie' };
+const invalidUserData = { type: 'user', name: 'David', age: 'thirty' }; // Wrong age type
+const missingTypeData = { name: 'Eve' };
+
+// Success cases
+const userResult = personDecoder.decodeAny(userData);
+// userResult is Ok({ type: 'user', name: 'Alice', age: 30 })
+
+const adminResult = personDecoder.decodeAny(adminData);
+// adminResult is Ok({ type: 'admin', name: 'Bob', permissions: ['read', 'write'] })
+
+// Failure cases
+const invalidTypeResult = personDecoder.decodeAny(invalidTypeData);
+// invalidTypeResult is Err("Unexpected discriminator value 'guest' for field 'type'. Expected one of: user, admin. Found in: {\"type\":\"guest\",\"name\":\"Charlie\"}")
+
+const invalidUserResult = personDecoder.decodeAny(invalidUserData);
+// invalidUserResult is Err("Error decoding variant with type='user': I expected to find a number but instead I found \"thirty\":\noccurred in a field named 'age'")
+
+const missingTypeResult = personDecoder.decodeAny(missingTypeData);
+// missingTypeResult is Err("Missing or invalid discriminator field 'type' in {\"name\":\"Eve\"}")
+```
+
+**Benefits:**
+
+- **Type Safety**: Automatically infers the correct union type VariantA | VariantB | ....
+- **Conciseness**: No need for .map<UnionType>(identity) on each variant decoder.
+- **Clarity**: The structure clearly expresses the intent of decoding based on a discriminator.
+- **Targeted Errors**: Provides specific errors for:
+  - Missing or invalid discriminator field.
+  - An unknown discriminator value.
+  - Failures within the specific variant decoder that was chosen.
+- **Efficiency**: Only runs the necessary decoder after checking the discriminator, avoiding redundant decoding attempts performed by oneOf.
+
 ### Handling Optional and Nullable Values
 
 Jsonous provides maybe and nullable decoders for handling optional and nullable values:
