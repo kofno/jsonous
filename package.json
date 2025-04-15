@@ -20,7 +20,7 @@
     "typescript": "^5.8.2"
   },
   "dependencies": {
-    "maybeasy": "^6.3.0",
+    "maybeasy": "^7.1.0",
     "resulty": "^8.0.0",
     "date-fns": "^4.1.0"
   },
